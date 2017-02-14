@@ -1,0 +1,37 @@
+# Predefined function and procedure test
+main
+var a, b, c, d;
+array [ 2 ] [ 3 ] [ 4 ] arr;
+{
+        let a <- 5;
+        let b <- 4;
+	let arr [ 1 ] [ 2 ] [ 3 ] <- 1;
+        if  a > b then
+                let b <- arr [ 0 ] [ a ] [ b ] * a
+        else
+                let c <- b+a; 
+		let b <- arr [ a ] [ b ] [ c ]
+        fi; 
+	while a*c > b*d do
+		let b <- b*5;
+		if  a > b then
+		  let b <- b+a;
+		  let d <- a+b;
+                  let b <- arr [ 0 ] [ a ] [ b ] * a
+            	else
+                  let a <- b+a;
+		  let b <- c+d;
+		  let a <- c+a;
+                  let b <- arr [ a ] [ b ] [ c ]
+          	fi
+	od;
+        let a <- b + 1;
+        let b <- a * 4;
+	if 2>3 then
+		let a <- c*d
+	else
+	   	let b <- c*d
+	fi
+    
+}
+.

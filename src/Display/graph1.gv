@@ -1,0 +1,7 @@
+digraph structs {
+      struct1 [shape=record,label="mov a 3\nadd a 3\nmul (2) 3"];
+      struct2 [shape=record,label="mov a 3\nadd a 3\nmul (2) 3"];
+      struct3 [shape=record,label="mov a 3\nadd a 3\nmul (2) 3"];
+      struct1 -> struct2;
+      struct1 -> struct3;
+ }

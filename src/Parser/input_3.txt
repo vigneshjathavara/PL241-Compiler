@@ -1,0 +1,27 @@
+(01/01/2015-00:00:00) :: START
+(01/01/2015-00:00:05) :: CONNECTED
+(01/01/2015-00:01:23) :: UI - HUD animation state changed
+(01/01/2015-00:03:47) :: ERROR - Unknown error
+(01/01/2015-00:12:11) :: DISCONNECTED
+(01/01/2015-00:13:14) :: UI - HUD animation state changed
+(01/01/2015-00:13:50) :: CONNECTED
+(01/01/2015-00:17:20) :: UI - HUD animation state changed
+(01/01/2015-00:21:06) :: Crash report sent to server successfully
+(01/01/2015-00:22:00) :: Warning: please implement this
+(01/01/2015-00:23:50) :: Warning: please implement this
+(01/01/2015-00:28:41) :: DISCONNECTED
+(01/01/2015-00:31:31) :: UI - HUD animation state changed
+(01/01/2015-00:32:12) :: ERROR - Unknown error
+(01/01/2015-00:35:45) :: CONNECTED
+(01/01/2015-00:36:50) :: DISCONNECTED
+(01/01/2015-00:37:01) :: Warning: please implement this
+(01/01/2015-00:38:22) :: Crash report sent to server unsuccessfully
+(01/01/2015-00:38:23) :: ERROR - Unknown error
+(01/01/2015-00:39:17) :: CONNECTED
+(01/01/2015-00:40:40) :: UI - HUD animation state changed
+(01/01/2015-00:40:42) :: UI - HUD animation state changed
+(01/01/2015-00:42:15) :: Crash report sent to server successfully
+(01/01/2015-00:42:30) :: DISCONNECTED
+(01/01/2015-00:43:56) :: UI - HUD animation state changed
+(01/01/2015-00:44:18) :: CONNECTED
+(01/01/2015-01:00:00) :: SHUTDOWN
