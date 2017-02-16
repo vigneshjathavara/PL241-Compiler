@@ -4,12 +4,10 @@ var a, b, c, d;
 {
 	let a <- 5;
 	let b <- 4;
-	if  a > b then
-		let c <- b * a;
-		let b <- c
-	fi;
-	let c <- c + 1;
-	let d <- 3 * 4	
-	
+	let c <- a * b;
+	let d <- a * b;
+	let a <- c * d;
+	let b <- d * c;
+	let c <- b * 5;
 }
 .

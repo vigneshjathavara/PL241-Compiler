@@ -60,14 +60,19 @@ public class CopyPropagation
 				if(r1.GetKind()==Result.Kind.VARIABLE && r1.getSSA() == latestSSA.get(r1.GetName()))
 				{
 					Result r = new Result(latestValue.get(r1.GetName()));
-					ins.setResult(1, r);
+					ins.setResult(1, r);//1 is for left operand
 				}
 
 				if(r2.GetKind()==Result.Kind.VARIABLE && r2.getSSA() == latestSSA.get(r2.GetName()))
 				{
 					Result r = new Result(latestValue.get(r2.GetName()));
-					ins.setResult(2, r);
+					ins.setResult(2, r);//2 is for right operand
 				}
+				
+				/*if(opCode >= Instruction.add && opCode <= Instruction.div && r2.GetKind()==Result.Kind.CONSTANT && r1.GetKind()==Result.Kind.CONSTANT)
+				{
+					
+				}*/
 			}
 
 			else if(opCode == Instruction.store)

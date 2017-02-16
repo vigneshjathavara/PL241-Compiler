@@ -292,6 +292,30 @@ public class Instruction
 	{
 		this.targetBlock = blockId;
 	}
+	
 
+	
+	
+	
 
+	
+	
+	
+	public boolean Compare(Instruction ins)
+	{
+		if(this.opCode == ins.opCode && this.phiResult == null && ins.phiResult == null && this.type == ins.type)
+		{
+			System.out.println("first");
+			System.out.println(this);
+			System.out.println(ins);
+			if(this.left == ins.left && this.ssaLeft== ins.ssaLeft && this.right == ins.right && this.ssaRight== ins.ssaRight && this.leftInstructionId == ins.leftInstructionId && this.rightInstructionId== ins.rightInstructionId)
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		else
+			return false;
+	}
 }

@@ -1,9 +1,4 @@
 digraph structs {
-0 [shape=record,label="***Block: 0 ***\n2 : cmp 5 4 \n3 : ble (2) [2]\n"]
-1 [shape=record,label="***Block: 1 ***\n4 : mul 4 5 \n"]
-2 [shape=record,label="***Block: 2 ***\n8 : phi c1 c0 0 \n7 : phi b2 b1 4 \n9 : add c1 1 \n12 : end \n"]
-0 -> 1;
-1 -> 2;
-0 -> 2;
+0 [shape=record,label="***Block: 0 ***\n2 : mul 5 4 \n6 : mul (2) (2) \n10 : mul (6) 5 \n"]
 
 }

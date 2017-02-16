@@ -1,4 +1,5 @@
 import Display.DotGen;
+import Optimization.CSEElimination;
 import Optimization.CopyPropagation;
 import Parser.Parser;
 import Structures.DominatorTree;
@@ -26,6 +27,12 @@ class test
    //Copy Propagation is performed on the 
    CopyPropagation cp = new CopyPropagation();
    cp.CPOptimise(p.GetCFG());
+   
+   DotGen cfgg_b4cse = new DotGen("src/Display/dotOutput_b4cse.gv");
+   cfgg_b4cse.generate(p.GetCFG());
+   
+   CSEElimination cse = new CSEElimination();
+   cse.CSEOptimise(p.GetCFG());
    
    //Compute the visual graph of CFG
    DotGen cfgg = new DotGen("src/Display/dotOutput.gv");
