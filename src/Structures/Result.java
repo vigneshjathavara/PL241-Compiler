@@ -168,6 +168,44 @@ public class Result
 		return "N/A";
 	}
 
+	public boolean equals(Result r)
+	{
+		if(r==null)
+			return false;
+		
+		
+		if(this.kind==r.kind)
+		{
+			if(this.kind == Result.Kind.VARIABLE && this.varName.compareTo(r.varName)==0 && this.ssa==r.ssa)
+			{
+				return true;
+			}
+
+			if(this.kind == Result.Kind.INSTRUCTION && this.instructionId ==r.instructionId)
+			{
+				return true;
+			}
+
+			if(this.kind == Result.Kind.CONSTANT && this.value==r.value)
+			{
+				return true;
+			}
+
+			if(this.kind == Result.Kind.FRAME_POINTER)
+			{
+				return true;
+			}
+
+			if(this.kind == Result.Kind.BASE_ADDRESS)
+			{
+				//String res = this.varName + "_baseaddress";
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 }
 
 

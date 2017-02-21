@@ -4,10 +4,13 @@ var a, b, c, d;
 {
 	let a <- 5;
 	let b <- 4;
-	let c <- a * b;
-	let d <- a * b;
-	let a <- c * d;
-	let b <- d * c;
-	let c <- b * 5;
+	let a <- a +1;
+	let b <- b+1;
+	while a > b do
+	let b <- b+2;
+	let a <- a+1
+	od;
+	let c <- a +3 ;
+	let d <- b+2
 }
 .

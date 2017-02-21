@@ -91,6 +91,7 @@ Function : Computation
 			return;
 		}
 		icGen.generate(null, null, Instruction.end, currentBlock, main);
+		main.setTail(currentBlock);
 		System.out.println("Parsed Successfully");
 
 	}	
@@ -237,6 +238,11 @@ Function : FuncDecl
 			scn.Error("identifier  Not Found");
 			return;
 		}
+		
+		CFG f = new CFG();
+		int identId = scn.id;
+		String name = scn.Id2String(identId);
+		c.AddFunction(name, f);
 
 		scn.Next();
 
@@ -680,6 +686,7 @@ Function : IfStatement
 				joinBlock.AddParent(ifBlock);
 				ifBlock.SetLeft(joinBlock);
 				joinBlock.AddParent(parent);
+				joinBlock.setBranchParent(parent);//--------
 				c.FixUp(r.GetInstructionId(),joinBlock.GetId());
 			
 				new PhiGen().Phi_if(ifBlock, parent, joinBlock, icGen, c);
@@ -693,6 +700,7 @@ Function : IfStatement
 				elseBlock.SetLeft(joinBlock);
 				joinBlock.AddParent(ifBlock);
 				joinBlock.AddParent(elseBlock);
+				joinBlock.setBranchParent(parent);//---------
 				c.FixUp(r.GetInstructionId(),elseBlock.GetId());
 				
 				new PhiGen().Phi_if(ifBlock, elseBlock, joinBlock, icGen, c);
@@ -761,7 +769,7 @@ Function : WhileStatement
 			else
 			{
 				System.out.println("Warning :Loop Body Never Reached");
-				BasicBlock rejectedWhileBody = new BasicBlock(BasicBlock.BlockType.JOIN, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), null, null);
+				BasicBlock rejectedWhileBody = new BasicBlock(BasicBlock.BlockType.WHILE_BODY, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), null, null);
 				this.currentBlock = rejectedWhileBody;
 				statSequence(rejectedWhileBody,c);
 				this.currentBlock = parent;
@@ -782,7 +790,7 @@ Function : WhileStatement
 
 		parent.SetLeft(whileMain);
 
-		BasicBlock whileBody = new BasicBlock(BasicBlock.BlockType.JOIN, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), whileMain, c);
+		BasicBlock whileBody = new BasicBlock(BasicBlock.BlockType.WHILE_BODY, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), whileMain, c);
 		
 
 		whileMain.SetLeft(whileBody);
@@ -801,7 +809,7 @@ Function : WhileStatement
 		BasicBlock whileBodyLast = this.currentBlock;
 		icGen.generate(whileMain.GetId(), Instruction.bra, whileBodyLast, c);
 		whileBodyLast.SetLeft(whileMain);
-		
+		whileMain.setWhileBodyLast(whileBodyLast);//------------
 
 		if(scn.sym != Scanner.odToken)
 		{
@@ -813,7 +821,7 @@ Function : WhileStatement
 		ArrayList<String> phiVariables = pgen.Phi_if(parent, whileBodyLast, whileMain, icGen, c);
 		pgen.PropagatePhi(phiVariables, whileBody,parent,c);
 		
-		BasicBlock whileJoin = new BasicBlock(BasicBlock.BlockType.JOIN, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), whileMain,c);
+		BasicBlock whileJoin = new BasicBlock(BasicBlock.BlockType.WHILE_JOIN, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), whileMain,c);
 		whileMain.SetRight(whileJoin);
 		c.FixUp(r.GetInstructionId(), whileJoin.GetId());
 		

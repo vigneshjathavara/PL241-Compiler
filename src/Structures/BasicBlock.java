@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class BasicBlock
 {	
-  public enum BlockType{ ROOT, JOIN, FUNCTION,IF,ELSE,WHILE_MAIN}
+  public enum BlockType{ ROOT, JOIN, FUNCTION,IF,ELSE,WHILE_MAIN, WHILE_JOIN,WHILE_BODY}
   
   static int bbcounter=0; 
 
@@ -15,10 +15,12 @@ public class BasicBlock
   ArrayList<Integer> instructionList;
   BasicBlock leftBlock;
   BasicBlock rightBlock;
+  private BasicBlock branchParent;
+  private BasicBlock whileBodyLast;
   ArrayList<BasicBlock> dominates;
   BasicBlock dominator;
-  ArrayList<BasicBlock> parents;
-  BlockType type;
+  private ArrayList<BasicBlock> parents;
+  private BlockType type;
   int blockId;
   
   public BasicBlock()
@@ -35,9 +37,9 @@ public class BasicBlock
 	  this.rightBlock = null;
 	  dominates = new ArrayList<BasicBlock>();
 	  dominator = null;
-	  this.parents = new ArrayList<BasicBlock>();
+	  this.setParents(new ArrayList<BasicBlock>());
 	  blockId = bbcounter++;
-	  this.type=t;
+	  this.setType(t);
 	  c.AddBasicBlock(blockId, this);
   }
   
@@ -53,14 +55,14 @@ public class BasicBlock
 	  {	  
 		  this.blockArrayTable.put(key, array.get(key));
 	  }
-	  this.parents = new ArrayList<BasicBlock>();
-	  this.parents.add(parent);
+	  this.setParents(new ArrayList<BasicBlock>());
+	  this.getParents().add(parent);
 	  //this.leftBlock = join;
 	  instructionList =  new ArrayList<Integer>();
 	  dominates = new ArrayList<BasicBlock>();
 	  dominator = null;
 	  blockId = bbcounter++;
-	  this.type = t;
+	  this.setType(t);
 	  if(c!=null)
 	  {	  
 	  c.AddBasicBlock(blockId, this);
@@ -90,7 +92,7 @@ public class BasicBlock
   
   public void AddParent(BasicBlock p)
   {
-	  this.parents.add(p);
+	  this.getParents().add(p);
   }
   
   public void AddInstruction(int i)
@@ -193,6 +195,38 @@ public class BasicBlock
 	public void AddNewArray(String name, ArrayList<Integer> dim)
 	{
 		this.blockArrayTable.put(name, dim);
+	}
+
+	public BasicBlock getBranchParent() {
+		return branchParent;
+	}
+
+	public void setBranchParent(BasicBlock branchParent) {
+		this.branchParent = branchParent;
+	}
+
+	public BasicBlock getWhileBodyLast() {
+		return whileBodyLast;
+	}
+
+	public void setWhileBodyLast(BasicBlock whileBodyLast) {
+		this.whileBodyLast = whileBodyLast;
+	}
+
+	public BlockType getType() {
+		return type;
+	}
+
+	public void setType(BlockType type) {
+		this.type = type;
+	}
+
+	public ArrayList<BasicBlock> getParents() {
+		return parents;
+	}
+
+	public void setParents(ArrayList<BasicBlock> parents) {
+		this.parents = parents;
 	}
   
   

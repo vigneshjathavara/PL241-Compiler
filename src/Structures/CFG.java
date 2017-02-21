@@ -8,10 +8,13 @@ public class CFG
 {
 
 	HashMap<String,ArrayList<Integer>> variableTable;
+	HashMap<String,ArrayList<Integer>>paramTable;
 	HashMap<String,ArrayList<Integer>>arrayTable;
 	BasicBlock root;
+	private BasicBlock tail;
 	HashMap<Integer,BasicBlock> blockList;
-	HashMap<Integer,CFG> functionList;
+	HashMap<String,CFG> functionList;
+	//ArrayList<String> functionsCalled;
 	HashMap<Integer,Instruction> instructionList;
 
 
@@ -20,7 +23,7 @@ public class CFG
 		variableTable = new HashMap<String,ArrayList<Integer>>();
 		arrayTable = new HashMap<String,ArrayList<Integer>>();
 		blockList = new HashMap<Integer,BasicBlock>();
-		functionList = new HashMap<Integer,CFG>();
+		functionList = new HashMap<String,CFG>();
 		instructionList = new HashMap<Integer,Instruction>();
 		root = new BasicBlock(BasicBlock.BlockType.ROOT, this);
 	}
@@ -31,9 +34,9 @@ public class CFG
 	}
 	
 
-	public void AddFunction(int id, CFG func)
+	public void AddFunction(String name, CFG func)
 	{
-		functionList.put(id, func);		
+		functionList.put(name, func);		
 	}
 
 	public CFG GetFunction(int funcId)
@@ -134,6 +137,14 @@ public class CFG
 				instructionList.get(key).FixUp(trgtId);
 			}		
 		}
+	}
+
+	public BasicBlock getTail() {
+		return tail;
+	}
+
+	public void setTail(BasicBlock tail) {
+		this.tail = tail;
 	}
 
 }
