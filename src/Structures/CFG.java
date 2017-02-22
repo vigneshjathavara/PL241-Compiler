@@ -8,7 +8,7 @@ public class CFG
 {
 
 	HashMap<String,ArrayList<Integer>> variableTable;
-	HashMap<String,ArrayList<Integer>>paramTable;
+	ArrayList<String>paramList;//----
 	HashMap<String,ArrayList<Integer>>arrayTable;
 	BasicBlock root;
 	private BasicBlock tail;
@@ -25,7 +25,24 @@ public class CFG
 		blockList = new HashMap<Integer,BasicBlock>();
 		functionList = new HashMap<String,CFG>();
 		instructionList = new HashMap<Integer,Instruction>();
+		paramList = new ArrayList<String>();
 		root = new BasicBlock(BasicBlock.BlockType.ROOT, this);
+	}
+
+	public HashMap<String, CFG> getFunctionList() {
+		return functionList;
+	}
+
+	public void setFunctionList(HashMap<String, CFG> functionList) {
+		this.functionList = functionList;
+	}
+
+	public HashMap<String, ArrayList<Integer>> getVariableTable() {
+		return variableTable;
+	}
+
+	public void setVariableTable(HashMap<String, ArrayList<Integer>> variableTable) {
+		this.variableTable = variableTable;
 	}
 
 	public HashMap<Integer, BasicBlock> GetBasicBlockList()
@@ -145,6 +162,11 @@ public class CFG
 
 	public void setTail(BasicBlock tail) {
 		this.tail = tail;
+	}
+	
+	public void AddNewParam(String name)
+	{
+		this.paramList.add(name);
 	}
 
 }

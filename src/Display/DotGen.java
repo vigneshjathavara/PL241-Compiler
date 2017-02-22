@@ -69,8 +69,10 @@ public class DotGen
 		for(int key :list)
 		{
 			Instruction i = c.GetInstruction(key);
-			printer.print(i.toString());
-			printer.print("\\n");
+			
+				printer.print(i.toString());
+				printer.print("\\n");
+			
 			
 		}
 		printer.println("\"]");

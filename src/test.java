@@ -3,17 +3,19 @@ import Optimization.CSEElimination;
 import Optimization.CopyPropagation;
 import Parser.Parser;
 import RegisterAllocation.LiveRangeAnalyzer;
+import Structures.CFG;
 import Structures.DominatorTree;
 import Structures.InterferenceGraph;
 import Structures.Result;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class test
 {
-
+/*
  public static void main(String arg[])
  {
-   Parser p = new Parser("src/Parser/test31.txt");
+   Parser p = new Parser("src/Parser/input_1.txt");
    //Parse the file for syntax and also prepare all structures
    //Structures are:
    try{
@@ -57,7 +59,7 @@ class test
    System.out.println("The Interference Graph:");
    lra.PrintInterferenceGraph();
 
- } 
+ } */
 	
 	/*
 	
@@ -82,5 +84,35 @@ class test
 		ig.AddToGraph(arr);
 		System.out.println(ig);
 	}*/
+ 
+ public static void main(String arg[])
+ {
+   Parser p = new Parser("src/Parser/input_1.txt");
+   //Parse the file for syntax and also prepare all structures
+   //Structures are:
+   try{
+        p.computation();
+      }
+
+    catch(RuntimeException e){
+	System.out.println(e);
+	return;
+	}
+   
+   HashMap<String, CFG> functions = p.GetCFG().getFunctionList();
+   for(String fKey:functions.keySet())
+   {
+	   CFG c = functions.get(fKey);
+	   DotGen cfgg_b4cp = new DotGen("src/Display/dotOutput_"+ fKey +".gv");
+	   cfgg_b4cp.generate(c);
+	   
+   }
+   
+   DotGen cfgg_b4cp = new DotGen("src/Display/dotOutput.gv");
+   cfgg_b4cp.generate(p.GetCFG());
+  
+  
+ }
+ 
 	
 }

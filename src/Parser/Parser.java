@@ -102,7 +102,7 @@ Function : VarDecl
 
 	void varDecl(BasicBlock bb, CFG c)
 	{
-		//System.out.println("VarDecl Enter");
+		System.out.println("VarDecl Enter");
 		ArrayList<Integer> dims = new ArrayList<Integer>();
 		int varOrArray = typeDecl(bb,c,dims);
 		//scn.Next();
@@ -141,7 +141,7 @@ Function : VarDecl
 			scn.Error("Semi Colon Not Found");
 			return;
 		}
-		//System.out.println("VarDecl End");
+		System.out.println("VarDecl End");
 	}
 
 	/***********************************************************************************************
@@ -243,12 +243,17 @@ Function : FuncDecl
 		int identId = scn.id;
 		String name = scn.Id2String(identId);
 		c.AddFunction(name, f);
-
+		BasicBlock root = f.GetRoot();
+		BasicBlock parent = this.currentBlock;
+		this.currentBlock = root;
+		
+		
+		
 		scn.Next();
 
 		if(scn.sym == Scanner.openparenToken)
 		{
-			formalParam();			
+			formalParam(root,f);			
 		}
 
 		scn.Next();
@@ -261,8 +266,18 @@ Function : FuncDecl
 		}
 
 		scn.Next();
+		HashMap<String,ArrayList<Integer>> vTable = c.getVariableTable();
+		for(String key:vTable.keySet())
+		{
+			root.AddNewVariable(key);
+			f.AddNewVariable(key);
+			
+			int ssa = f.AddNewSSA(key);
+			System.out.println("Variable:"+key+" ssa:"+ssa);
+			root.AddNewSSA(key, ssa);
+		}
 
-		funcBody(bb,c);
+		funcBody(root,f);
 
 		scn.Next();
 		if(scn.sym!= Scanner.semiToken)
@@ -271,6 +286,7 @@ Function : FuncDecl
 			return;
 		}
 		scn.Next();	
+		this.currentBlock = parent;
 		System.out.println("FuncDecl End");
 	}
 
@@ -278,12 +294,22 @@ Function : FuncDecl
 Function : FormalParam
 	 **/
 
-	void formalParam()
+	void formalParam(BasicBlock bb, CFG c)
 	{
 		System.out.println("formalParam Enter");
 		scn.Next();
 		if(scn.sym==Scanner.ident)
 		{	
+			String name= scn.Id2String(scn.id);
+			System.out.println("Test0");
+			bb.AddNewVariable(name);
+			c.AddNewVariable(name);
+			c.AddNewParam(name);
+			int ssa = c.AddNewSSA(name);
+			System.out.println("Variable:"+name+" ssa:"+ssa);
+			bb.AddNewSSA(name, ssa);
+			
+			System.out.println("Test1");
 			scn.Next();
 			while(scn.sym == Scanner.commaToken)
 			{
@@ -293,6 +319,10 @@ Function : FormalParam
 					scn.Error("identifier  Not Found");
 					return;
 				}
+				name= scn.Id2String(scn.id);
+				bb.AddNewVariable(name);
+				c.AddNewVariable(name);
+				c.AddNewParam(name);
 				scn.Next();
 			}
 		}
@@ -325,12 +355,12 @@ Function : FuncBody
 		}
 
 		scn.Next();
-
+		System.out.println("Test2");
 		if(scn.sym == Scanner.letToken ||scn.sym == Scanner.callToken||scn.sym == Scanner.ifToken||scn.sym == Scanner.whileToken||scn.sym == Scanner.returnToken)
 		{	
 			statSequence(bb,c);
 		}
-
+		System.out.println("Test3");
 		if(scn.sym != Scanner.endToken)
 		{
 			scn.Error("End Token  Not Found");
@@ -346,7 +376,7 @@ Function : StatSequence
 
 	void statSequence(BasicBlock bb, CFG c)
 	{
-		//System.out.println("StatSequence Enter");
+		System.out.println("StatSequence Enter");
 		//if(scn.sym == scn.letToken ||scn.sym == scn.callToken||scn.sym == scn.ifToken||scn.sym == scn.whileToken||scn.sym == scn.returnToken)
 		//{
 		statement(this.currentBlock,c);
@@ -365,7 +395,7 @@ Function : StatSequence
 		//scn.Error("Statement  Not Found");
 		//  return;
 		//}
-		//System.out.println("StatSequence End");
+		System.out.println("StatSequence End");
 
 	}
 	/***********************************************************************************************

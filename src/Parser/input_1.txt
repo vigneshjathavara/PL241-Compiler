@@ -1,16 +1,25 @@
-# Predefined function and procedure test
 main
-var a, b, c, d;
-{
-	let a <- 5;
-	let b <- 4;
-	let a <- a +1;
-	if a < b then
-		let b <- b+1
-	else
-		let b <- b+2
-	fi;	
-	let c <- a +3 ;
-	let d <- b+2
-}
+    var foo, too;
+    var af;
+    function bar(x);
+    var par, q;
+    {
+    	let par <- 3;
+      	let q <- 2;
+      	let x <- par * q;
+		return x
+    };
+    function foo(x);
+    var par, q;
+    {
+       let par <- 3;
+      	let q <- 2;
+      	let x <- par * q;
+		return x
+    };
+    {
+        let foo <- 3+too;
+        let af <- foo+6
+
+    }
 .
