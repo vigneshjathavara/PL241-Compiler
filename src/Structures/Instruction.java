@@ -54,6 +54,16 @@ public class Instruction
 	int targetBlock;//target if branch
 	Type type;
 
+	Result returnValue;//-----------
+	
+	public Result getReturnValue() {
+		return returnValue;
+	}
+
+	public void setReturnValue(Result returnValue) {
+		this.returnValue = returnValue;
+	}
+
 	public Instruction(Type t, Result l, Result r, int op, CFG c, BasicBlock bb)
 	{	
 
@@ -131,6 +141,10 @@ public class Instruction
 
 	}
 
+	
+	
+	
+	
 	public int GetId()
 	{
 		return this.currentInstructionId;
@@ -296,7 +310,13 @@ public class Instruction
 
 	
 	
-	
+	public int getTargetBlock() {
+		return targetBlock;
+	}
+
+	public void setTargetBlock(int targetBlock) {
+		this.targetBlock = targetBlock;
+	}
 
 	
 	

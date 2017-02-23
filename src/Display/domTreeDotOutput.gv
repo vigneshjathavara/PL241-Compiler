@@ -5,7 +5,6 @@ digraph structs {
 3 [shape=record,label="***Block: 3 ***\n15 : add a3 3 \n17 : add b3 2 \n19 : end \n"]
 0 -> 1;
 1 -> 2;
-2 -> 1;
 1 -> 3;
 
 }

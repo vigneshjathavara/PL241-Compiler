@@ -11,11 +11,23 @@ public class InterferenceGraph {
 	
 	
 	private HashMap<String, ArrayList<String>> adjacencyList;
-	
+
 	public InterferenceGraph()
 	{
 		adjacencyList = new HashMap<String, ArrayList<String>>();
 	}
+	
+	
+	
+	public HashMap<String, ArrayList<String>> getAdjacencyList() {
+		return adjacencyList;
+	}
+
+	public void setAdjacencyList(HashMap<String, ArrayList<String>> adjacencyList) {
+		this.adjacencyList = adjacencyList;
+	}
+	
+	
 	
 	public void AddToGraph(ArrayList<String> liveSet)
 	{

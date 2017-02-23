@@ -12,10 +12,10 @@ import java.util.HashMap;
 
 class test
 {
-/*
+
  public static void main(String arg[])
  {
-   Parser p = new Parser("src/Parser/input_1.txt");
+   Parser p = new Parser("src/Parser/test31.txt");
    //Parse the file for syntax and also prepare all structures
    //Structures are:
    try{
@@ -59,7 +59,7 @@ class test
    System.out.println("The Interference Graph:");
    lra.PrintInterferenceGraph();
 
- } */
+ } 
 	
 	/*
 	
@@ -84,7 +84,7 @@ class test
 		ig.AddToGraph(arr);
 		System.out.println(ig);
 	}*/
- 
+ /*
  public static void main(String arg[])
  {
    Parser p = new Parser("src/Parser/input_1.txt");
@@ -112,7 +112,7 @@ class test
    cfgg_b4cp.generate(p.GetCFG());
   
   
- }
+ }*/
  
 	
 }

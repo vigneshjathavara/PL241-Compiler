@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class BasicBlock
 {	
-  public enum BlockType{ ROOT, JOIN, FUNCTION,IF,ELSE,WHILE_MAIN, WHILE_JOIN,WHILE_BODY}
+  public enum BlockType{ ROOT, JOIN, FUNCTION,IF,ELSE,WHILE_MAIN, WHILE_JOIN,WHILE_BODY, NORMAL}
   
   static int bbcounter=0; 
 

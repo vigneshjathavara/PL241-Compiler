@@ -12,6 +12,10 @@ public class CFG
 	HashMap<String,ArrayList<Integer>>arrayTable;
 	BasicBlock root;
 	private BasicBlock tail;
+	int returnTo;
+
+	
+
 	HashMap<Integer,BasicBlock> blockList;
 	HashMap<String,CFG> functionList;
 	//ArrayList<String> functionsCalled;
@@ -29,6 +33,15 @@ public class CFG
 		root = new BasicBlock(BasicBlock.BlockType.ROOT, this);
 	}
 
+	public int getReturnTo() {
+		return returnTo;
+	}
+
+	public void setReturnTo(int returnTo) {
+		this.returnTo = returnTo;
+	}
+	
+	
 	public HashMap<String, CFG> getFunctionList() {
 		return functionList;
 	}

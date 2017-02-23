@@ -1,4 +1,4 @@
 digraph structs {
-1 [shape=record,label="***Block: 1 ***\n0 : move 3 par0 \n1 : move 2 q0 \n2 : mul par0 q0 \n3 : move (2) x1 \n"]
+1 [shape=record,label="***Block: 1 ***\n0 : move 3 par0 \n1 : move 2 q0 \n2 : mul par0 q0 \n3 : move (2) x1 \n4 : bra [3]\n"]
 
 }

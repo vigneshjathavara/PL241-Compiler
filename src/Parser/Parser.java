@@ -1,5 +1,7 @@
 package Parser;
 import Structures.*;
+import Structures.Instruction.Type;
+
 import java.util.*;
 
 import CodeGen.IcCodeGen;
@@ -286,6 +288,7 @@ Function : FuncDecl
 			return;
 		}
 		scn.Next();	
+		f.setTail(this.currentBlock);
 		this.currentBlock = parent;
 		System.out.println("FuncDecl End");
 	}
@@ -410,33 +413,33 @@ Function : Statement
 		if(scn.sym ==  Scanner.letToken)
 		{
 			scn.Next();
-			assignment(bb,c);
+			assignment(this.currentBlock,c);
 		}
 
 		else if(scn.sym ==Scanner.callToken)
 		{
 			scn.Next();
-			funcCall(bb,c);
+			funcCall(this.currentBlock,c);
 		}
 
 		else if(scn.sym == Scanner.ifToken)
 		{
 			scn.Next();
-			ifStatement(bb,c);
+			ifStatement(this.currentBlock,c);
 			scn.Next();
 		}
 
 		else if (scn.sym == Scanner.whileToken)
 		{
 			scn.Next();
-			whileStatement(bb,c);
+			whileStatement(this.currentBlock,c);
 			scn.Next();
 		}
 
 		else if (scn.sym == Scanner.returnToken)
 		{
 			scn.Next();
-			returnStatement(bb,c);
+			returnStatement(this.currentBlock,c);
 		}
 
 		else
@@ -459,7 +462,7 @@ Function : Assignment
 		//System.out.println("Assignment Enter");
 
 		//ArrayList<Result> dims = new ArrayList<Result>();
-		Result r1 = designator(bb, c);
+		Result r1 = designator(this.currentBlock, c);
 
 		if(scn.sym != Scanner.becomesToken)
 		{
@@ -467,21 +470,21 @@ Function : Assignment
 			return;
 		}
 		scn.Next();
-		Result r2 = expression(bb,c);
+		Result r2 = expression(this.currentBlock,c);
 
 		if(r1.GetKind()==Result.Kind.VARIABLE)
 		{
 			int ssa = c.AddNewSSA(r1.GetName());
 			r1.SetSSA(ssa);
 			bb.AddNewSSA(r1.GetName(), ssa);
-			icGen.generate(r1, r2, Instruction.move, bb, c);
+			icGen.generate(r1, r2, Instruction.move, this.currentBlock, c);
 
 		}
 
 		else
 		{
 			r1 = icGen.generate(r1, bb, c);
-			icGen.generate(r2, r1, Instruction.store, bb, c);
+			icGen.generate(r2, r1, Instruction.store, this.currentBlock, c);
 
 
 		}
@@ -564,7 +567,7 @@ Function : Expression
 			scn.Next();
 
 			r2 =term(bb,c);
-			r1 = icGen.generate(r1, r2, op, bb, c);
+			r1 = icGen.generate(r1, r2, op, this.currentBlock, c);
 		}
 
 		return r1;
@@ -576,7 +579,7 @@ Function : Expression
 Function : FuncCall
 	 **/
 
-	void funcCall(BasicBlock bb, CFG c)
+	Result funcCall(BasicBlock bb, CFG c)
 	{
 		System.out.println("FuncCall Enter");
 		/*	if(scn.sym != scn.callToken)
@@ -590,9 +593,17 @@ Function : FuncCall
 		if(scn.sym != Scanner.ident)
 		{
 			scn.Error("Ident  Not Found");
-			return;
+			return null;
 		}
-
+		
+		System.out.println("Function being called:" + scn.Id2String(scn.id));
+		
+		CFG fCFG = c.getFunctionList().get(scn.Id2String(scn.id));
+		BasicBlock fTail = fCFG.getTail();
+		BasicBlock fRoot = fCFG.GetRoot();
+		
+		System.out.println("Root:" +fRoot.GetId()+" Tail:" + fTail.GetId());
+		
 		scn.Next();
 		if(scn.sym == Scanner.openparenToken)
 		{
@@ -609,11 +620,33 @@ Function : FuncCall
 			if(scn.sym != Scanner.closeparenToken)
 			{
 				scn.Error("Close parenthisis  Not Found");
-				return;
+				return null;
 			}
 			scn.Next();									
 		}
+		
+		
+		
+		
+		Result r = icGen.generate(fRoot.GetId(), Instruction.bra, bb, c);
+		
+		BasicBlock fJoin = new BasicBlock(BasicBlock.BlockType.NORMAL, bb.GetLatestVariableVersion(), bb.GetArrayTable(),bb, c );
+		this.currentBlock = fJoin;
+		
+		bb.SetLeft(fJoin);
+		
+		
+		
+		fCFG.setReturnTo(fJoin.GetId());		
+		
+		Instruction ins = c.GetInstruction(r.GetInstructionId());
+		Instruction returnIns =fCFG.GetInstruction( fTail.GetInstructionList().get(fTail.GetInstructionList().size()-1));
+		returnIns.setTargetBlock(fJoin.GetId());
+		ins.setReturnValue(returnIns.getReturnValue());
+		
 		System.out.println("FuncCall End");
+		return returnIns.getReturnValue();
+		
 	}
 
 	/***********************************************************************************************
@@ -775,6 +808,7 @@ Function : WhileStatement
 
 		BasicBlock whileMain = new BasicBlock(BasicBlock.BlockType.WHILE_MAIN,bb.GetLatestVariableVersion(), bb.GetArrayTable(), parent, c);
 		Result r = relation(whileMain,c);
+		whileMain.setBranchParent(parent);
 
 
 		/*When while condition is constant*/
@@ -866,9 +900,14 @@ Function : returnStatement
 	void returnStatement(BasicBlock bb, CFG c)
 	{
 		System.out.println("returnStatement Enter");
+		System.out.println("Return to:"+ c.getReturnTo());
+		Result r = icGen.generate(c.getReturnTo(), Instruction.bra, bb, c);
+		Instruction ins = c.GetInstruction(r.GetInstructionId());
+		
 		if(scn.sym == Scanner.ident || scn.sym == Scanner.number || scn.sym == Scanner.openparenToken || scn.sym == Scanner.callToken)
 		{
-			expression(bb,c);
+			Result res = expression(bb,c);
+			ins.setReturnValue(res);
 		} 
 		System.out.println("returnStatement End");
 	}
@@ -1032,9 +1071,9 @@ Function : factor
 		else if(scn.sym == Scanner.callToken)
 		{
 			scn.Next();
-			funcCall(bb,c);
+			return funcCall(bb,c);
 			//To be Implemented
-			return null;
+			
 		}
 		return null;
 		//System.out.println("Factor End");

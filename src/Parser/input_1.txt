@@ -9,17 +9,18 @@ main
       	let x <- par * q;
 		return x
     };
-    function foo(x);
+    function foo();
     var par, q;
     {
        let par <- 3;
       	let q <- 2;
-      	let x <- par * q;
-		return x
+      	let q <- par * q;
+		return q
     };
     {
         let foo <- 3+too;
-        let af <- foo+6
+        call bar(3);
+        let af <- foo+ call foo
 
     }
 .

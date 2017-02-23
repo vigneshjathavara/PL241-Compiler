@@ -15,18 +15,27 @@ public class LiveRangeAnalyzer {
 	
 	
 	InterferenceGraph iG; 
+
 	ArrayList<String> liveSet;
 	
 	public LiveRangeAnalyzer(CFG c)
 	{
 		iG = new InterferenceGraph();
 		liveSet = new ArrayList<String>();
-		Analyze(c.getTail(),this.liveSet,c,null,false);
+		Analyze(c.getTail(),this.liveSet,c,null,false,null,false);
 	}
 	
+	public InterferenceGraph getiG() {
+		return iG;
+	}
+
+
+
+	public void setiG(InterferenceGraph iG) {
+		this.iG = iG;
+	}
 	
-	
-	public ArrayList<String> Analyze(BasicBlock b, ArrayList<String> liveSet, CFG c, BasicBlock stop, boolean flag)
+	public ArrayList<String> Analyze(BasicBlock b, ArrayList<String> liveSet, CFG c, BasicBlock stop, boolean flag,BasicBlock retBlk, boolean flag2)
 	{
 		if(flag && b==stop)
 			return liveSet;
@@ -88,7 +97,11 @@ public class LiveRangeAnalyzer {
 			}			
 		}
 		
-		if(b.getType() == BasicBlock.BlockType.JOIN || b.getType() == BasicBlock.BlockType.WHILE_JOIN )
+		
+		if(flag2 && b==retBlk)
+			return liveSet;
+		
+		if(b.getType() == BasicBlock.BlockType.JOIN || b.getType() == BasicBlock.BlockType.WHILE_MAIN )
 		{
 			if(b.getType() == BasicBlock.BlockType.JOIN)
 			{
@@ -104,43 +117,64 @@ public class LiveRangeAnalyzer {
 					}
 					if(cnt==1)
 					{
-						for(String s:rightPhi)
+						for(String s:leftPhi)
 						{
-							ls.remove(s);
+							ls.add(s);
 						}
+						iG.AddToGraph(ls);
 					}
 					
 					if(cnt==2)
 					{
-						for(String s:leftPhi)
+						for(String s:rightPhi)
 						{
-							ls.remove(s);
+							ls.add(s);
 						}
+						iG.AddToGraph(ls);
 					}
 					cnt++;
-					ArrayList<String> temp = Analyze(bb,ls,c,b.getBranchParent(),true);
+					ArrayList<String> temp = Analyze(bb,ls,c,b.getBranchParent(),true,null,false);
 					for(String s:temp)
 					{
 						if(!lsu.contains(s))
 							lsu.add(s);
 					}
+					iG.AddToGraph(lsu);
 				}
 				
-				return Analyze(b.getBranchParent(),lsu,c,null,false);
+				return Analyze(b.getBranchParent(),lsu,c,null,false,null,false);
 				
 			}
 			
 			else
 			{
 				ArrayList<BasicBlock> parents = b.getParents();
+				
+				ArrayList<String> ls = new ArrayList<String>();
+				for(String str:liveSet)
+				{
+					ls.add(str);
+				}
+				for(String str:rightPhi)
+				{
+					ls.add(str);
+				}
+				iG.AddToGraph(ls);
+				ArrayList<String> temp = Analyze(b.getWhileBodyLast(), ls, c, b.getBranchParent(),true,b,true);
+				
 				for(BasicBlock bb: parents)
 				{
-					ArrayList<String> ls = new ArrayList<String>();
-					for(String str:liveSet)
+					ls = new ArrayList<String>();
+					for(String str:temp)
 					{
 						ls.add(str);
 					}
-					return Analyze(bb.getWhileBodyLast(), ls, c, null,false);
+					for(String str:leftPhi)
+					{
+						ls.add(str);
+					}
+					iG.AddToGraph(ls);
+					return Analyze(bb, ls, c, null,false,null,false);
 				}
 			}
 		}
@@ -155,7 +189,23 @@ public class LiveRangeAnalyzer {
 				{
 					ls.add(str);
 				}
-				return Analyze(bb,ls,c,null,false);
+				
+				return Analyze(bb,ls,c,stop,flag,retBlk,flag2);
+				/*
+				if(flag != true && flag2 !=true)
+				{
+					return Analyze(bb,ls,c,null,false,null,false);
+				}
+				
+				else if(flag!=true && flag2==true)
+				{
+					return Analyze(bb,ls,c,stop,false,retBlk,true);
+				}
+				
+				else if(flag==true && flag2!=true)
+				{
+					return Analyze(bb,ls,c,stop,true,retBlk,true);
+				}*/
 			}
 			//return liveSet;
 			

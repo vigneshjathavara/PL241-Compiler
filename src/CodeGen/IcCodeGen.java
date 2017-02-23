@@ -116,10 +116,12 @@ public class IcCodeGen
 
 	}
 	
-	public void generate(int blockId, int opCode, BasicBlock bb, CFG c )
+	public Result generate(int blockId, int opCode, BasicBlock bb, CFG c )
 	{
 		Instruction i = new Instruction(Instruction.Type.UBRANCH, blockId, opCode, c, bb);
 		System.out.println("Instruction : " + i.toString());
+		Result res = new Result(Result.Kind.INSTRUCTION,i.GetId());
+		return res;
 	}
 
 	public Result generate(Result arr, BasicBlock bb, CFG c)
