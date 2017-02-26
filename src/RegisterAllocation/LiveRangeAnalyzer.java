@@ -50,18 +50,19 @@ public class LiveRangeAnalyzer {
 		while(li.hasPrevious())
 		{
 			Instruction ins = c.GetInstruction(li.previous());
-			if(ins.GetOpCode()>=Instruction.add && ins.GetOpCode()<=Instruction.div)
+			String res = "(" +ins.GetId() +")";
+			liveSet.remove(res);
+			if(ins.GetOpCode()>=Instruction.add && ins.GetOpCode()<=Instruction.store)
 			{
-				String res = "(" +ins.GetId() +")";
-				liveSet.remove(res);
+				
 				Result left = ins.GetResult(1);
 				Result right = ins.GetResult(2);
-				if(left.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(left.toString()))
+				if(left.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(left.toString()) && left.GetKind()!=Result.Kind.FRAME_POINTER && left.GetKind()!=Result.Kind.BASE_ADDRESS)
 				{
 					liveSet.add(left.toString());
 				}
 				
-				if(right.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(right.toString()))
+				if(right.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(right.toString()) && left.GetKind()!=Result.Kind.FRAME_POINTER && left.GetKind()!=Result.Kind.BASE_ADDRESS)
 				{
 					liveSet.add(right.toString());
 				}
@@ -69,7 +70,7 @@ public class LiveRangeAnalyzer {
 				iG.AddToGraph(liveSet);
 			}
 			
-			if(ins.GetOpCode()==Instruction.cmp)
+		/*	if(ins.GetOpCode()==Instruction.cmp)
 			{
 				Result left = ins.GetResult(1);
 				Result right = ins.GetResult(2);
@@ -84,7 +85,7 @@ public class LiveRangeAnalyzer {
 				}
 				
 				iG.AddToGraph(liveSet);
-			}
+			}*/
 			
 			if(ins.GetOpCode()==Instruction.phi)
 			{
@@ -94,7 +95,62 @@ public class LiveRangeAnalyzer {
 				iG.AddToGraph(liveSet);
 				leftPhi.add(left.toString());
 				rightPhi.add(right.toString());								
-			}			
+			}	
+			
+		/*	if(ins.GetOpCode()==Instruction.store)
+			{
+				
+			}
+		*/	
+			if(ins.GetOpCode()==Instruction.load)
+			{
+				Result left = ins.GetResult(1);
+				if(left.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(left.toString()) && left.GetKind()!=Result.Kind.FRAME_POINTER && left.GetKind()!=Result.Kind.BASE_ADDRESS)
+				{
+					liveSet.add(left.toString());
+				}
+				iG.AddToGraph(liveSet);
+			}
+			
+			if(ins.GetOpCode()==Instruction.push)
+			{
+				Result pp = ins.getpp();
+				if(pp.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(pp.toString()))
+				{
+					liveSet.add(pp.toString());
+				}
+				
+				iG.AddToGraph(liveSet);
+			}
+			
+			if(ins.GetOpCode()==Instruction.write)
+			{
+				Result w = ins.getW();
+				if(w.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(w.toString()))
+				{
+					liveSet.add(w.toString());
+				}
+				
+				iG.AddToGraph(liveSet);
+			}
+			
+		/*	if(ins.GetOpCode()==Instruction.adda)
+			{
+				Result left = ins.GetResult(1);
+				Result right = ins.GetResult(2);
+				if(left.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(left.toString()) && left.GetKind()!=Result.Kind.FRAME_POINTER && left.GetKind()!=Result.Kind.BASE_ADDRESS)
+				{
+					liveSet.add(left.toString());
+				}
+				
+				if(right.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(right.toString()) && left.GetKind()!=Result.Kind.FRAME_POINTER && left.GetKind()!=Result.Kind.BASE_ADDRESS)
+				{
+					liveSet.add(right.toString());
+				}
+				
+				iG.AddToGraph(liveSet);
+			}*/
+			
 		}
 		
 		

@@ -83,13 +83,13 @@ public class PhiGen
 	}
 
 
-	public void PropagatePhi(ArrayList<String> phiVariables, BasicBlock bb,BasicBlock parent, CFG c)
+	public void PropagatePhi(ArrayList<String> phiVariables, BasicBlock bb,BasicBlock parent, CFG c, ArrayList<Integer> visited)
 	{
-		if(phiVariables.size()==0 || bb==null )
+		if(phiVariables.size()==0 || bb==null || visited.contains(bb.GetId()))
 			return;
 
 		ArrayList<Integer> instructions= bb.GetInstructionList();
-
+		//System.out.println("Instructions no:" +instructions.size()+" BlockId:"+bb.GetId() + " Block Type:"+ bb.getType());
 		for(int key :instructions)
 		{
 			Instruction ins = c.GetInstruction(key);
@@ -123,7 +123,7 @@ public class PhiGen
 			else if(opCode == Instruction.store)
 			{
 				Result r = ins.GetResult(1);
-				
+				//System.out.println("The result:"+ r.GetName());
 				if(r.GetKind()==Result.Kind.VARIABLE)
 				{
 					if(phiVariables.contains(r.GetName()) && r.getSSA()==parent.GetLastestSSAOf(r.GetName()))
@@ -188,9 +188,9 @@ public class PhiGen
 			newPhiVariablesLeft.add(key);
 			newPhiVariablesRight.add(key);
 		}
-		
-		PropagatePhi(newPhiVariablesLeft, bb.GetChild(1),parent, c);
-		PropagatePhi(newPhiVariablesRight, bb.GetChild(2),parent, c);
+		visited.add(bb.GetId());
+		PropagatePhi(newPhiVariablesLeft, bb.GetChild(1),parent, c, visited);
+		PropagatePhi(newPhiVariablesRight, bb.GetChild(2),parent, c, visited);
 
 
 	}

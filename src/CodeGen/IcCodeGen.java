@@ -69,6 +69,31 @@ public class IcCodeGen
 		{
 			Instruction i = new Instruction(Instruction.Type.END,Instruction.end,c,bb);
 			System.out.println("Instruction : " + i.toString());
+			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
+			return res;
+		}
+		
+		if(opCode == Instruction.writeNL)
+		{
+			Instruction i = new Instruction(Instruction.Type.WRITENL,Instruction.writeNL,c,bb);
+			System.out.println("Instruction : " + i.toString());
+			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
+			return res;
+		}
+		
+		if(opCode == Instruction.read)
+		{
+			Instruction i = new Instruction(Instruction.Type.READ,Instruction.read,c,bb);
+			System.out.println("Instruction : " + i.toString());
+			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
+			return res;
+		}
+		
+		else if(opCode == Instruction.marker)
+		{
+			Instruction i=new Instruction(Instruction.Type.MARKER, r1, Instruction.marker,c,bb);
+			System.out.println("Instruction : " + i.toString());
+			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
 			return res;
 		}
 
@@ -106,7 +131,25 @@ public class IcCodeGen
 	{
 		Result res = null;
 		Instruction i = null;
-		if(opCode>=Instruction.bne && opCode<= Instruction.bgt)
+		
+		if(opCode == Instruction.write)
+		{
+			i =new Instruction(Instruction.Type.WRITE,r1,opCode,c,bb);//write
+		}
+		
+		else if(opCode == Instruction.push)
+		{
+			i=new Instruction(Instruction.Type.PUSH, r1, Instruction.push,c,bb);
+		}
+		
+		else if(opCode == Instruction.pop)
+		{
+			i=new Instruction(Instruction.Type.POP, r1, Instruction.pop,c,bb);
+		}
+		
+		
+		
+		else if(opCode>=Instruction.bne && opCode<= Instruction.bgt)
 			i =new Instruction(Instruction.Type.CBRANCH,r1,opCode,c,bb);//conditional branch
 		else
 			i = new Instruction(Instruction.Type.NORMAL,r1,opCode,c,bb);//load
@@ -115,6 +158,8 @@ public class IcCodeGen
 		return res;
 
 	}
+	
+	
 	
 	public Result generate(int blockId, int opCode, BasicBlock bb, CFG c )
 	{
@@ -131,7 +176,7 @@ public class IcCodeGen
 		ArrayList<Integer> dims = c.GetArrayDims(arr.GetName());
 		ArrayList<Result> loc = arr.GetDims();
 		Result r1=null,r2;
-
+		Result mrkr = generate(null, null, Instruction.marker, bb, c);
 		if(loc.size()==1)
 		{
 				r1 = loc.get(0);	
@@ -142,10 +187,13 @@ public class IcCodeGen
 			for(int i =0; i<loc.size()-1;i++)
 			{
 				int num=1;
+				System.out.println("generate Test1");
 				for(int j=i+1; j<dims.size();j++)
 				{
+					System.out.println("generate Test");
 					num*=dims.get(j);
 				}
+				System.out.println("generate Test2");
 				Result temp = new Result(Result.Kind.CONSTANT,num);
 				
 				if(i>0)

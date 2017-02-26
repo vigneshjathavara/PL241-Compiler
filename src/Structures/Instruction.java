@@ -3,7 +3,7 @@ package Structures;
 
 public class Instruction
 {
-	public enum Type{PHI, UBRANCH, CBRANCH, NORMAL, END}
+	public enum Type{PHI, UBRANCH, CBRANCH, NORMAL, END, WRITE, WRITENL, READ, POP, PUSH,RETURN, MARKER}
 
 	static int pc=0;
 
@@ -29,7 +29,10 @@ public class Instruction
 	public static final int read = 20;
 	public static final int write= 21;
 	public static final int writeNL =22;
-
+	public static final int push = 23;
+	public static final int pop = 24;
+	public static final int marker = 25;
+	//public static final int call = 25;
 
 	int currentInstructionId;
 	int opCode;
@@ -64,6 +67,41 @@ public class Instruction
 		this.returnValue = returnValue;
 	}
 
+	
+	Result w;
+	
+	
+	public Result getW() {
+		return w;
+	}
+
+	public void setW(Result w) {
+		this.w = w;
+	}
+	
+	Result pp;
+	
+
+	public Result getpp() {
+		return pp;
+	}
+
+	public void setpp(Result pp) {
+		this.pp = pp;
+	}
+
+	
+	int register;
+	
+	
+	public int getRegister() {
+		return register;
+	}
+
+	public void setRegister(int register) {
+		this.register = register;
+	}
+
 	public Instruction(Type t, Result l, Result r, int op, CFG c, BasicBlock bb)
 	{	
 
@@ -75,8 +113,10 @@ public class Instruction
 		this.currentInstructionId=Instruction.pc++;
 		c.AddInstruction(currentInstructionId, this);
 		bb.AddInstruction(currentInstructionId);
+		this.register = -1;
 
 	}
+	
 	
 	public Instruction(Type t, Result l, Result r, Result pR, int op, CFG c, BasicBlock bb)
 	{	
@@ -90,18 +130,40 @@ public class Instruction
 		this.currentInstructionId=Instruction.pc++;
 		c.AddInstruction(currentInstructionId, this);	
 		bb.AddInstructionFront(currentInstructionId);
-
+		this.register = -1;
 	}
 
 	public Instruction(Type t,int op, CFG c, BasicBlock bb)
 	{
 		if(op ==Instruction.end)
 		{
+			this.type = t;
 			this.opCode = op;
-			this.currentInstructionId = Instruction.pc++;
-			c.AddInstruction(currentInstructionId, this);
-			bb.AddInstruction(currentInstructionId);
+			
 		}
+		
+		else if(op==Instruction.read)
+		{
+			this.type=t;
+			this.opCode=op;
+		}
+		
+		else if(op==Instruction.writeNL)
+		{
+			this.type=t;
+			this.opCode=op;
+		}
+		
+		else if(op==Instruction.marker)
+		{
+			this.type=t;
+			this.opCode=op;
+		}
+		
+		this.currentInstructionId = Instruction.pc++;
+		c.AddInstruction(currentInstructionId, this);
+		bb.AddInstruction(currentInstructionId);
+		this.register = -1;
 	}
 
 	public Instruction(Type t, int targetBlock, int op, CFG c, BasicBlock bb)
@@ -114,7 +176,7 @@ public class Instruction
 			this.currentInstructionId = Instruction.pc++;
 			c.AddInstruction(currentInstructionId, this);
 			bb.AddInstruction(currentInstructionId);
-			
+			this.register = -1;
 		}
 	}
 	
@@ -128,6 +190,20 @@ public class Instruction
 			this.targetBlock=-1;
 		}	
 		
+		else if(t==Type.WRITE)
+		{
+			this.type=t;
+			this.w=l;
+			this.opCode=op;
+		}
+		
+		else if(t==Type.PUSH || t==Type.POP)
+		{
+			this.type=t;
+			this.pp=l;
+			this.opCode=op;
+		}
+		
 		else
 		{
 			this.type=t;
@@ -138,7 +214,7 @@ public class Instruction
 		this.currentInstructionId=Instruction.pc++;
 		c.AddInstruction(currentInstructionId, this);
 		bb.AddInstruction(currentInstructionId);
-
+		this.register = -1;
 	}
 
 	
@@ -229,6 +305,12 @@ public class Instruction
 		case Instruction.write: return "write";
 
 		case Instruction.writeNL: return "writeNL";
+		
+		case Instruction.push: return "push";
+		
+		case Instruction.pop: return "pop";
+		
+		case Instruction.marker: return "marker";
 
 		}
 
@@ -297,7 +379,18 @@ public class Instruction
 		{
 			ins.append("["+this.targetBlock+"]");
 		}
-
+		
+		else if(this.type == Instruction.Type.WRITE)
+		{
+			ins.append(w.toString());
+		}
+		
+		else if(this.type == Instruction.Type.PUSH)
+		{
+			ins.append(pp.toString());
+		}
+		
+		
 
 		return ins.toString();
 	}
@@ -338,4 +431,89 @@ public class Instruction
 		else
 			return false;
 	}
+	
+	
+	
+	public String toStringWithRegister()
+	{
+		StringBuffer ins = new StringBuffer();
+		
+		
+		if(this.register!=-1)
+			ins.append("R" + this.register + " : ");
+		else
+			ins.append("" + this.currentInstructionId + " : ");
+		ins.append(OpToString(this.opCode));
+		ins.append(" ");
+
+		if(this.type == Instruction.Type.NORMAL || this.type == Instruction.Type.END)
+		{
+			if(this.left != null)
+			{
+				ins.append(left.toStringWithRegister());
+				ins.append(" ");
+			}
+
+
+			if(this.right != null)
+			{
+				ins.append(right.toStringWithRegister());
+				ins.append(" ");
+			}
+		}
+		
+		else if(this.type == Instruction.Type.PHI)
+		{
+			if(this.phiResult != null)
+			{
+				ins.append(phiResult.toStringWithRegister());
+				ins.append(" ");
+			}
+			
+			
+			if(this.left != null)
+			{
+				ins.append(left.toStringWithRegister());
+				ins.append(" ");
+			}
+
+
+			if(this.right != null)
+			{
+				ins.append(right.toStringWithRegister());
+				ins.append(" ");
+			}
+		}
+		
+		else if(this.type == Instruction.Type.CBRANCH)
+		{
+			if(conditionInstruction !=null)
+			{
+				ins.append(conditionInstruction.toStringWithRegister());
+				ins.append(" ");
+				ins.append("["+this.targetBlock+"]");
+				
+			}
+		}
+		
+		else if(this.type == Instruction.Type.UBRANCH)
+		{
+			ins.append("["+this.targetBlock+"]");
+		}
+		
+		else if(this.type == Instruction.Type.WRITE)
+		{
+			ins.append(w.toStringWithRegister());
+		}
+		
+		else if(this.type == Instruction.Type.PUSH)
+		{
+			ins.append(pp.toStringWithRegister());
+		}
+		
+		
+
+		return ins.toString();
+	}
+	
 }

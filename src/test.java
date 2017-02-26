@@ -2,7 +2,9 @@ import Display.DotGen;
 import Optimization.CSEElimination;
 import Optimization.CopyPropagation;
 import Parser.Parser;
+import RegisterAllocation.GraphColoring;
 import RegisterAllocation.LiveRangeAnalyzer;
+import RegisterAllocation.ReplaceWithRegisters;
 import Structures.CFG;
 import Structures.DominatorTree;
 import Structures.InterferenceGraph;
@@ -15,7 +17,7 @@ class test
 
  public static void main(String arg[])
  {
-   Parser p = new Parser("src/Parser/test31.txt");
+   Parser p = new Parser("src/Parser/input_1.txt");
    //Parse the file for syntax and also prepare all structures
    //Structures are:
    try{
@@ -58,7 +60,17 @@ class test
    LiveRangeAnalyzer lra = new LiveRangeAnalyzer(p.GetCFG());
    System.out.println("The Interference Graph:");
    lra.PrintInterferenceGraph();
-
+   
+   
+   GraphColoring gC = new GraphColoring();
+   gC.GreedyColoring(lra.getiG());
+   gC.printRegisters();
+   
+   ReplaceWithRegisters rwr = new ReplaceWithRegisters();
+   rwr.replace(p.GetCFG().GetRoot(), p.GetCFG(), gC.getRegisterMap());
+   System.out.println("creating CFGWR");
+   DotGen CFGWR = new DotGen("src/Display/CFGWRDotOutput.gv");
+   CFGWR.generateWithRegister(p.GetCFG()); 
  } 
 	
 	/*

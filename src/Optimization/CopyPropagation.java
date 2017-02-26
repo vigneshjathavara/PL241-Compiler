@@ -121,7 +121,11 @@ public class CopyPropagation
 			{
 				Result r1 = ins.GetResult(1);
 				Result r2 = ins.GetResult(2);
-
+				
+				System.out.println(r1.GetName()+" "+r1.GetKind() +" "+r1.toString());
+				System.out.println(lValue.toString());
+				System.out.println(r2.toString());
+				
 				if(r1.GetKind()==Result.Kind.VARIABLE && lValue.get(r1.GetName()).containsKey(r1.getSSA()))
 				{
 					Result r = new Result(lValue.get(r1.GetName()).get(r1.getSSA()));
@@ -130,11 +134,38 @@ public class CopyPropagation
 
 				if(r2.GetKind()==Result.Kind.VARIABLE)
 				{
-					lValue.get(r2.GetName()).put(r2.getSSA(), r1);
+					if(r1.GetKind()==Result.Kind.VARIABLE)
+					{
+						lValue.get(r2.GetName()).put(r2.getSSA(), lValue.get(r1.GetName()).get(r1.getSSA()));
+					}
+					else
+					{
+						lValue.get(r2.GetName()).put(r2.getSSA(), r1);
+					}
 				}
 				
 				it.remove();
 				
+			}
+			
+			if(opCode == Instruction.write)
+			{
+				Result w = ins.getW();
+				if(w.GetKind()==Result.Kind.VARIABLE)
+				{
+					Result r = new Result(lValue.get(w.GetName()).get(w.getSSA()));
+					ins.setW(r);
+				}
+			}
+			
+			if(opCode == Instruction.push)
+			{
+				Result pp = ins.getpp();
+				if(pp.GetKind()==Result.Kind.VARIABLE)
+				{
+					Result r = new Result(lValue.get(pp.GetName()).get(pp.getSSA()));
+					ins.setpp(r);
+				}
 			}
 
 		}

@@ -14,12 +14,23 @@ public class Result
 	Kind kind;
 	boolean flag;
 	ArrayList<Result> dims;
+	int register;
+
+
+	public int getRegister() {
+		return register;
+	}
+
+
+	public void setRegister(int register) {
+		this.register = register;
+	}
 
 
 	public Result()
 	{
 		dims = new ArrayList<Result>();
-
+		this.register = -1;
 	}
 
 
@@ -38,6 +49,7 @@ public class Result
 				this.dims.add(key);
 			}
 		}
+		this.register = -1;
 	}
 
 	public Result(Kind k, int v)
@@ -55,7 +67,7 @@ public class Result
 
 		default: break;
 		}
-
+		this.register = -1;
 	}
 
 	public Result(String name, int ss)
@@ -63,12 +75,14 @@ public class Result
 		this.kind = Kind.VARIABLE;
 		this.varName =name;
 		this.ssa = ss;
+		this.register = -1;
 	}
 
 	public Result(boolean f)
 	{
 		this.kind = Kind.BOOLEAN;
 		this.flag =f;
+		this.register = -1;
 	}
 
 	public Result(String name, ArrayList<Result> d)
@@ -80,18 +94,21 @@ public class Result
 		{	  
 			this.dims.add(key);
 		}
+		this.register = -1;
 	}
 
 
 	public Result(Kind k)
 	{
 		this.kind = Kind.FRAME_POINTER;
+		this.register = -1;
 	}
 
 	public Result(String name)
 	{
 		this.varName = name;
 		this.kind = Kind.BASE_ADDRESS;
+		this.register = -1;
 	}
 
 	public ArrayList<Result> GetDims()
@@ -164,7 +181,13 @@ public class Result
 			String res = this.varName + "_baseaddress";
 			return res;
 		}
-
+		
+		
+		if(this.kind == Result.Kind.ARRAY)
+		{
+			String res = this.varName + dims.toString();
+			return res;
+		}
 		return "N/A";
 	}
 
@@ -205,6 +228,15 @@ public class Result
 		
 		return false;
 	}
+	
+	public String toStringWithRegister()
+	{
+		if(this.register!=-1)
+			return "R" +this.register;
+		else
+			return this.toString();
+	}
+
 	
 }
 

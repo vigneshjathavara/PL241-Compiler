@@ -11,7 +11,7 @@ import Structures.Result;
 
 public class CSEElimination {
 
-	
+
 	public void CSEOptimise(CFG c)
 	{
 
@@ -25,6 +25,40 @@ public class CSEElimination {
 			int key = (int) it.next();
 			boolean flag = false;
 			Instruction insE = c.GetInstruction(key);
+
+			if(insE.GetOpCode() == Instruction.marker)
+			{		
+				int ignoreInsNo =  (int) it.next();
+				Instruction ignoreIns = c.GetInstruction(ignoreInsNo);
+				while(ignoreIns.GetOpCode()!= Instruction.load && ignoreIns.GetOpCode()!= Instruction.store)
+				{
+					ignoreInsNo =  (int) it.next();
+					ignoreIns = c.GetInstruction(ignoreInsNo);
+				}
+				key = (int) it.next();
+				insE = c.GetInstruction(key);
+			}
+			
+			
+			if(insE.GetOpCode() == Instruction.write)
+			{
+				Result w = insE.getW();
+				if(w.GetKind()==Result.Kind.INSTRUCTION && instructionReplaceMap.containsKey(w.GetInstructionId()))
+				{
+					insE.setW(new Result(Result.Kind.INSTRUCTION, instructionReplaceMap.get(w.GetInstructionId())));
+				}
+			}
+			
+			
+			if(insE.GetOpCode() == Instruction.push)
+			{
+				Result pp = insE.getpp();
+				if(pp.GetKind()==Result.Kind.INSTRUCTION && instructionReplaceMap.containsKey(pp.GetInstructionId()))
+				{
+					insE.setW(new Result(Result.Kind.INSTRUCTION, instructionReplaceMap.get(pp.GetInstructionId())));
+				}
+			}
+
 			if(insE.GetOpCode() >= Instruction.add && insE.GetOpCode() <=Instruction.cmp)
 			{
 
@@ -37,37 +71,37 @@ public class CSEElimination {
 				{
 					insE.setResult(2, new Result(Result.Kind.INSTRUCTION, instructionReplaceMap.get(insE.GetResult(2).GetInstructionId())));
 				}
-			
 
-			
-			for(int i : instructionMap.keySet())
-			{
-				Instruction ins = instructionMap.get(i);
-				System.out.println("E:"+key+" I:"+i);
-				if(insE.GetOpCode() >= Instruction.add && insE.GetOpCode() <=Instruction.div)
+
+
+				for(int i : instructionMap.keySet())
 				{
-					//System.out.println("opCode safe");
-					if(insE.GetOpCode()==ins.GetOpCode())
+					Instruction ins = instructionMap.get(i);
+					System.out.println("E:"+key+" I:"+i);
+					if(insE.GetOpCode() >= Instruction.add && insE.GetOpCode() <=Instruction.div)
 					{
-						//System.out.println("opCode same");
-						
-						if((insE.GetResult(1).toString().compareTo(ins.GetResult(1).toString())==0 && insE.GetResult(1).toString().compareTo(ins.GetResult(1).toString())==0)||(insE.GetResult(1).toString().compareTo(ins.GetResult(2).toString())==0 && insE.GetResult(2).toString().compareTo(ins.GetResult(1).toString())==0))
-								{
-							System.out.println("Entered");
-									instructionReplaceMap.put(insE.GetId(), ins.GetId());
-									it.remove();
-									flag =true;
-								}
+						//System.out.println("opCode safe");
+						if(insE.GetOpCode()==ins.GetOpCode())
+						{
+							//System.out.println("opCode same");
+
+							if((insE.GetResult(1).toString().compareTo(ins.GetResult(1).toString())==0 && insE.GetResult(1).toString().compareTo(ins.GetResult(1).toString())==0)||(insE.GetResult(1).toString().compareTo(ins.GetResult(2).toString())==0 && insE.GetResult(2).toString().compareTo(ins.GetResult(1).toString())==0))
+							{
+								System.out.println("Entered");
+								instructionReplaceMap.put(insE.GetId(), ins.GetId());
+								it.remove();
+								flag =true;
+							}
+						}
 					}
+
 				}
-				
+				if(flag == false)
+				{
+					instructionMap.put(key, insE);
+				}
+
 			}
-			if(flag == false)
-			{
-				instructionMap.put(key, insE);
-			}
-			
-		}
 		}
 		ArrayList <BasicBlock> domList = c.GetRoot().GetDominatorChildren();
 
@@ -83,32 +117,32 @@ public class CSEElimination {
 				for(Integer key : instructionMap.keySet())
 				{
 					instructionMap1.put(key, instructionMap.get(key));
-					
+
 				}
-				
+
 				for(Integer key : instructionReplaceMap.keySet())
 				{
 					instructionReplaceMap1.put(key, instructionReplaceMap.get(key));
-					
+
 				}
-				
+
 				optimise(b, instructionMap1, instructionReplaceMap1, c);
 			}
 		}
-		
-		
-		
+
+
+
 	}
-	
-	
+
+
 	public void optimise(BasicBlock root, HashMap<Integer,Instruction> instructionMap, HashMap<Integer, Integer> instructionReplaceMap, CFG c)
 	{
 
 		if(root == null)
 			return;
-		
-		
-		
+
+
+
 
 		ArrayList<Integer> instructions= root.GetInstructionList();
 		Iterator<Integer> it = instructions.iterator();
@@ -117,7 +151,7 @@ public class CSEElimination {
 			int key = (int) it.next();
 			boolean flag = false;
 			Instruction insE = c.GetInstruction(key);
-			
+
 			if(insE.GetOpCode() >= Instruction.add && insE.GetOpCode() <=Instruction.cmp)
 			{
 				if(insE.GetResult(1).GetKind()==Result.Kind.INSTRUCTION && instructionReplaceMap.containsKey(insE.GetResult(1).GetInstructionId()))
@@ -170,24 +204,24 @@ public class CSEElimination {
 				for(Integer key : instructionMap.keySet())
 				{
 					instructionMap1.put(key, instructionMap.get(key));
-					
+
 				}
-				
+
 				for(Integer key : instructionReplaceMap.keySet())
 				{
 					instructionReplaceMap1.put(key, instructionReplaceMap.get(key));
-					
+
 				}
-				
+
 				optimise(b, instructionMap1, instructionReplaceMap1, c);
 			}
 		}
-		
-		
-		
-	
-		
+
+
+
+
+
 	}
-	
-	
+
+
 }

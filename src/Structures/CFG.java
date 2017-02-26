@@ -9,12 +9,19 @@ public class CFG
 
 	HashMap<String,ArrayList<Integer>> variableTable;
 	ArrayList<String>paramList;//----
+	
+
 	HashMap<String,ArrayList<Integer>>arrayTable;
+	
+
 	BasicBlock root;
 	private BasicBlock tail;
-	int returnTo;
+	boolean returns;
 
 	
+
+	
+
 
 	HashMap<Integer,BasicBlock> blockList;
 	HashMap<String,CFG> functionList;
@@ -32,15 +39,25 @@ public class CFG
 		paramList = new ArrayList<String>();
 		root = new BasicBlock(BasicBlock.BlockType.ROOT, this);
 	}
-
-	public int getReturnTo() {
-		return returnTo;
+	
+	
+	public HashMap<String, ArrayList<Integer>> getArrayTable() {
+		return arrayTable;
 	}
 
-	public void setReturnTo(int returnTo) {
-		this.returnTo = returnTo;
+	public void setArrayTable(HashMap<String, ArrayList<Integer>> arrayTable) {
+		this.arrayTable = arrayTable;
 	}
 	
+	public boolean isReturns() {
+		return returns;
+	}
+
+
+	public void setReturns(boolean returns) {
+		this.returns = returns;
+	}
+
 	
 	public HashMap<String, CFG> getFunctionList() {
 		return functionList;
@@ -180,6 +197,15 @@ public class CFG
 	public void AddNewParam(String name)
 	{
 		this.paramList.add(name);
+	}
+	
+	public ArrayList<String> getParamList() {
+		return paramList;
+	}
+
+
+	public void setParamList(ArrayList<String> paramList) {
+		this.paramList = paramList;
 	}
 
 }

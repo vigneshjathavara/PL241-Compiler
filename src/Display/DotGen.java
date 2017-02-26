@@ -47,6 +47,15 @@ public class DotGen
 	}
 	
 	
+	public void generateWithRegister(CFG c)
+	{
+		printer.println("digraph structs {");
+		generateBlockWithRegister(c.GetRoot(),c);
+		printer.println(links.toString());
+		printer.println("}");
+		printer.close();
+	}
+	
 	
 	public void generateBlock(BasicBlock bb, CFG c)
 	{
@@ -157,5 +166,57 @@ public class DotGen
 		
 	}
 	
+	
+	
+	public void generateBlockWithRegister(BasicBlock bb, CFG c)
+	{
+		/*InputStream in = new FileInputStream("dotOutput.gv");
+		InputStreamReader reader = new InputStreamReader(in);
+		this.buffer = new BufferedReader(reader);
+		*/
+		
+		if(bb==null)
+			return;
+		
+		if(visited.contains(bb.GetId()))
+			return;
+		
+		visited.add(bb.GetId());//mark visited node
+		
+		printer.print(bb.GetId() + " [shape=record,label=\"");
+		printer.print("***Block: " + bb.GetId() + " ***\\n" );
+		ArrayList<Integer> list = bb.GetInstructionList();
+		System.out.println();
+		System.out.println("***Block: " + bb.GetId() + " ***\\n");
+		System.out.println();
+		
+		for(int key :list)
+		{
+			Instruction i = c.GetInstruction(key);
+			
+				printer.print(i.toStringWithRegister());
+				printer.print("\\n");
+				
+				System.out.println(i.toStringWithRegister());
+			
+		}
+		printer.println("\"]");
+		
+		if(bb.GetChild(1)!=null)
+		{	
+			links.append(bb.GetId() + " -> " + bb.GetChild(1).GetId() +";\n");
+			generateBlockWithRegister(bb.GetChild(1),c);
+			
+		}
+		
+		if(bb.GetChild(2)!=null)
+		{
+			links.append(bb.GetId() + " -> " + bb.GetChild(2).GetId() +";\n");
+			generateBlockWithRegister(bb.GetChild(2),c);
+		
+		}
+		
+		
+	}
 	
 }

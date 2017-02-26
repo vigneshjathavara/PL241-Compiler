@@ -1,11 +1,4 @@
 digraph structs {
-0 [shape=record,label="***Block: 0 ***\n2 : add 5 1 \n4 : add 4 1 \n"]
-1 [shape=record,label="***Block: 1 ***\n14 : phi b3 (4) (8) \n13 : phi a3 (2) (10) \n6 : cmp a3 b3 \n7 : ble (6) [3]\n"]
-2 [shape=record,label="***Block: 2 ***\n8 : add b3 2 \n10 : add a3 1 \n12 : bra [1]\n"]
-3 [shape=record,label="***Block: 3 ***\n15 : add a3 3 \n17 : add b3 2 \n19 : end \n"]
-0 -> 1;
-1 -> 2;
-2 -> 1;
-1 -> 3;
+0 [shape=record,label="***Block: 0 ***\n1 : read \n3 : mul (1) 2 \n5 : marker \n6 : add FP a_baseaddress \n7 : adda 16 (6) \n8 : store 45 (7) \n9 : marker \n10 : add FP a_baseaddress \n11 : adda 20 (10) \n12 : load (11) \n13 : add (12) 2 \n17 : write (1)\n19 : write (3)\n20 : mul 45 (3) \n21 : marker \n22 : add FP a_baseaddress \n23 : adda 16 (22) \n24 : store (20) (23) \n25 : write (3)\n26 : end \n"]
 
 }

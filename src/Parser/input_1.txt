@@ -1,26 +1,21 @@
+# Array testing
 main
-    var foo, too;
-    var af;
-    function bar(x);
-    var par, q;
-    {
-    	let par <- 3;
-      	let q <- 2;
-      	let x <- par * q;
-		return x
-    };
-    function foo();
-    var par, q;
-    {
-       let par <- 3;
-      	let q <- 2;
-      	let q <- par * q;
-		return q
-    };
-    {
-        let foo <- 3+too;
-        call bar(3);
-        let af <- foo+ call foo
-
-    }
+array [ 5 ] a;
+var b, c, d;
+function foo( );
+{
+	return 14
+};
+{
+	let b <- call InputNum();
+	let c <- b*2;
+	let a[ 4 ]<- 45;
+	let d <- a[ 5 ] + 2;
+	let c <- b*2;
+	call OutputNum(b);
+	let b <-  c;
+	call OutputNum(b);
+	let a[4] <- 45 *b;
+	call OutputNum(b)
+}
 .
