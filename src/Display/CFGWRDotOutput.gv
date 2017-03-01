@@ -1,4 +1,0 @@
-digraph structs {
-0 [shape=record,label="***Block: 0 ***\nR0 : read \nR2 : mul R0 2 \n5 : marker \nR1 : add FP a_baseaddress \nR1 : adda 16 R1 \n8 : store 45 R1 \n9 : marker \nR1 : add FP a_baseaddress \nR1 : adda 20 R1 \nR1 : load R1 \n13 : add R1 2 \n17 : write R0\n19 : write R2\nR0 : mul 45 R2 \n21 : marker \nR1 : add FP a_baseaddress \nR1 : adda 16 R1 \n24 : store R0 R1 \n25 : write R2\n26 : end \n"]
-
-}

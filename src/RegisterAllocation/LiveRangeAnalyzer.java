@@ -38,7 +38,11 @@ public class LiveRangeAnalyzer {
 	public ArrayList<String> Analyze(BasicBlock b, ArrayList<String> liveSet, CFG c, BasicBlock stop, boolean flag,BasicBlock retBlk, boolean flag2)
 	{
 		if(flag && b==stop)
+			{
+			
+			System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQ"+b.GetId()+"QQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
 			return liveSet;
+			}
 		
 		if(b == null)
 			return liveSet;
@@ -47,6 +51,7 @@ public class LiveRangeAnalyzer {
 		ListIterator<Integer> li = iList.listIterator(iList.size());
 		ArrayList<String> leftPhi = new ArrayList<String>();
 		ArrayList<String> rightPhi = new ArrayList<String>();
+		System.out.println("-----------------------------------------"+b.GetId()+"--------------------------------------");
 		while(li.hasPrevious())
 		{
 			Instruction ins = c.GetInstruction(li.previous());
@@ -93,8 +98,14 @@ public class LiveRangeAnalyzer {
 				Result left = ins.GetResult(1);
 				Result right = ins.GetResult(2);
 				iG.AddToGraph(liveSet);
-				leftPhi.add(left.toString());
-				rightPhi.add(right.toString());								
+				if(left.GetKind()!=Result.Kind.CONSTANT && !leftPhi.contains(left.toString()) && left.GetKind()!=Result.Kind.FRAME_POINTER && left.GetKind()!=Result.Kind.BASE_ADDRESS)
+				{
+					leftPhi.add(left.toString());
+				}
+				if(right.GetKind()!=Result.Kind.CONSTANT && !rightPhi.contains(right.toString()) && left.GetKind()!=Result.Kind.FRAME_POINTER && left.GetKind()!=Result.Kind.BASE_ADDRESS)
+				{
+					rightPhi.add(right.toString());	
+				}
 			}	
 			
 		/*	if(ins.GetOpCode()==Instruction.store)
@@ -134,6 +145,17 @@ public class LiveRangeAnalyzer {
 				iG.AddToGraph(liveSet);
 			}
 			
+			if(ins.GetOpCode()>=Instruction.bne && ins.GetOpCode()<=Instruction.bgt)
+			{
+				Result r = ins.getConditionInstruction();
+				if(r.GetKind()!=Result.Kind.CONSTANT && !liveSet.contains(r.toString()))
+				{
+					liveSet.add(r.toString());
+				}
+				
+				iG.AddToGraph(liveSet);
+			}
+			
 		/*	if(ins.GetOpCode()==Instruction.adda)
 			{
 				Result left = ins.GetResult(1);
@@ -155,12 +177,15 @@ public class LiveRangeAnalyzer {
 		
 		
 		if(flag2 && b==retBlk)
+		{
+			System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWW"+b.GetId()+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 			return liveSet;
-		
+		}
 		if(b.getType() == BasicBlock.BlockType.JOIN || b.getType() == BasicBlock.BlockType.WHILE_MAIN )
 		{
 			if(b.getType() == BasicBlock.BlockType.JOIN)
 			{
+				System.out.println("JOIN BLK  " + b.GetId() + " "+b.getType());
 				ArrayList<BasicBlock> parents = b.getParents();
 				int cnt =1;
 				ArrayList<String> lsu = new ArrayList<String>();
@@ -198,14 +223,15 @@ public class LiveRangeAnalyzer {
 					iG.AddToGraph(lsu);
 				}
 				
-				return Analyze(b.getBranchParent(),lsu,c,null,false,null,false);
+				return Analyze(b.getBranchParent(),lsu,c,stop,flag,retBlk,flag2);
 				
 			}
 			
 			else
 			{
+				System.out.println("WHILE MAIN BLK  " + b.GetId() + " "+b.getType());
 				ArrayList<BasicBlock> parents = b.getParents();
-				
+				System.out.println("while main parents:"+parents.size());
 				ArrayList<String> ls = new ArrayList<String>();
 				for(String str:liveSet)
 				{
@@ -220,6 +246,7 @@ public class LiveRangeAnalyzer {
 				
 				for(BasicBlock bb: parents)
 				{
+					System.out.println("while main parent:"+bb.GetId());
 					ls = new ArrayList<String>();
 					for(String str:temp)
 					{
@@ -230,7 +257,8 @@ public class LiveRangeAnalyzer {
 						ls.add(str);
 					}
 					iG.AddToGraph(ls);
-					return Analyze(bb, ls, c, null,false,null,false);
+					
+					return Analyze(bb, ls, c, stop,flag,retBlk,flag2);
 				}
 			}
 		}

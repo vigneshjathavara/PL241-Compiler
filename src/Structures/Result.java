@@ -167,7 +167,7 @@ public class Result
 
 		if(this.kind == Result.Kind.CONSTANT)
 		{
-			String res = ""+ this.value;
+			String res = "#"+ this.value;
 			return res;
 		}
 

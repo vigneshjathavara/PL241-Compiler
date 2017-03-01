@@ -31,7 +31,7 @@ public class InterferenceGraph {
 	
 	public void AddToGraph(ArrayList<String> liveSet)
 	{
-		System.out.println("LiveSet:");
+		System.out.print("LiveSet:");
 		System.out.println(liveSet);
 		for(String r:liveSet)
 		{
@@ -49,7 +49,7 @@ public class InterferenceGraph {
 			{
 				if(r.equals(r2)==false)
 				{
-					System.out.println(r.toString());
+					//System.out.println(r.toString());
 					
 					if(!adjacencyList.get(r).contains(r2))
 					{

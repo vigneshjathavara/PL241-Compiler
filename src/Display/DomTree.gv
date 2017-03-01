@@ -1,0 +1,40 @@
+digraph structs {
+0 [shape=record,label="***Block: 0 ***\n0 : move #1 a0 \n1 : move #2 b0 \n2 : move #3 c0 \n3 : move #4 d0 \n4 : move #5 e0 \n5 : move #6 f0 \n6 : move #7 g0 \n7 : move #8 h0 \n"]
+1 [shape=record,label="***Block: 1 ***\n77 : phi h4 h0 h3 \n76 : phi g7 g0 g6 \n75 : phi f5 f0 f4 \n74 : phi e8 e0 e7 \n73 : phi d7 d0 d6 \n72 : phi a2 a0 a1 \n8 : div b0 #4 \n9 : add (8) #5 \n10 : cmp (9) #8 \n11 : bge (10) [18]\n"]
+2 [shape=record,label="***Block: 2 ***\n12 : mul a2 #7 \n13 : add (12) #9 \n14 : move (13) a1 \n15 : cmp c0 d7 \n16 : bge (15) [16]\n"]
+3 [shape=record,label="***Block: 3 ***\n17 : sub g7 #5 \n18 : mul (17) h4 \n19 : move (18) g1 \n"]
+4 [shape=record,label="***Block: 4 ***\n25 : phi h2 h4 h1 \n20 : cmp g1 h2 \n21 : ble (20) [6]\n"]
+5 [shape=record,label="***Block: 5 ***\n22 : add h2 #1 \n23 : move (22) h1 \n24 : bra [4]\n"]
+6 [shape=record,label="***Block: 6 ***\n26 : add g1 h2 \n27 : move (26) g2 \n"]
+7 [shape=record,label="***Block: 7 ***\n28 : cmp c0 d7 \n29 : blt (28) [15]\n"]
+8 [shape=record,label="***Block: 8 ***\n30 : mul f5 f5 \n31 : mul (30) #7 \n32 : sub (31) #2 \n33 : move (32) e1 \n"]
+9 [shape=record,label="***Block: 9 ***\n43 : phi e3 e1 e2 \n42 : phi d2 d7 d1 \n34 : sub d2 #7 \n35 : cmp (34) e3 \n36 : beq (35) [11]\n"]
+10 [shape=record,label="***Block: 10 ***\n37 : sub d2 #1 \n38 : move (37) d1 \n39 : add e3 #1 \n40 : move (39) e2 \n41 : bra [9]\n"]
+11 [shape=record,label="***Block: 11 ***\n44 : mul f5 e3 \n45 : move (44) f1 \n"]
+12 [shape=record,label="***Block: 12 ***\n46 : move #725 g3 \n"]
+13 [shape=record,label="***Block: 13 ***\n56 : phi e5 e8 e4 \n55 : phi d4 d7 d3 \n47 : sub d4 #8 \n48 : cmp (47) e5 \n49 : beq (48) [15]\n"]
+14 [shape=record,label="***Block: 14 ***\n50 : sub d4 #1 \n51 : move (50) d3 \n52 : add e5 #1 \n53 : move (52) e4 \n54 : bra [13]\n"]
+15 [shape=record,label="***Block: 15 ***\n57 : mul g3 f5 \n58 : div (57) #4 \n59 : move (58) f2 \n"]
+16 [shape=record,label="***Block: 16 ***\n63 : phi g4 g7 g3 \n62 : phi f3 f1 f2 \n61 : phi e6 e3 e5 \n60 : phi d5 d2 d4 \n64 : add g4 h4 \n65 : move (64) g5 \n"]
+17 [shape=record,label="***Block: 17 ***\n70 : phi h3 h2 h0 \n69 : phi g6 g2 g5 \n68 : phi f4 f5 f3 \n67 : phi e7 e8 e6 \n66 : phi d6 d7 d5 \n71 : bra [1]\n"]
+18 [shape=record,label="***Block: 18 ***\n78 : mul a2 d7 \n79 : move (78) c1 \n80 : add g7 h4 \n81 : sub (80) #7 \n82 : move (81) h5 \n83 : mul b0 c1 \n84 : add f5 (83) \n85 : move (84) e9 \n86 : end \n"]
+0 -> 1;
+1 -> 2;
+2 -> 3;
+3 -> 4;
+4 -> 5;
+4 -> 6;
+2 -> 7;
+7 -> 8;
+8 -> 9;
+9 -> 10;
+9 -> 11;
+7 -> 12;
+12 -> 13;
+13 -> 14;
+13 -> 15;
+7 -> 16;
+2 -> 17;
+1 -> 18;
+
+}

@@ -2,7 +2,9 @@ package RegisterAllocation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
+import CodeGen.IcCodeGen;
 import Structures.BasicBlock;
 import Structures.CFG;
 import Structures.Instruction;
@@ -28,9 +30,13 @@ public class ReplaceWithRegisters {
 		visited.add(bb.GetId());//mark visited node
 
 		ArrayList<Integer> list = bb.GetInstructionList();
-		for(int key :list)
+		Iterator<Integer> it = list.iterator();
+		while(it.hasNext())
 		{
+			int key = (int) it.next();
+			
 			Instruction ins = c.GetInstruction(key);
+		
 			int opCode = ins.GetOpCode();
 
 			if(registerMap.containsKey("(" +ins.GetId() +")"))
@@ -83,31 +89,66 @@ public class ReplaceWithRegisters {
 				}
 			}
 
+			else if(opCode >= Instruction.bne && opCode <=Instruction.bgt)
+			{
+				Result r = ins.getConditionInstruction();
+				if(registerMap.containsKey(r.toString()))
+				{
+					r.setRegister(registerMap.get(r.toString()));
+				}
+			}
 
 			else if(opCode == Instruction.phi)
 			{
 				Result r1 = ins.GetResult(1);
 				Result r2 = ins.GetResult(2);
 				Result r3 = ins.GetResult(3);
-				/*	
-				if(r1.GetKind()==Result.Kind.VARIABLE && lValue.get(r1.GetName()).containsKey(r1.getSSA()))
+				
+				if(registerMap.containsKey(r1.toString()))
 				{
-					Result r = new Result(lValue.get(r1.GetName()).get(r1.getSSA()));
-					ins.setResult(1, r);
-
+					r1.setRegister(registerMap.get(r1.toString()));
 				}
 
-				if(r2.GetKind()==Result.Kind.VARIABLE && lValue.get(r2.GetName()).containsKey(r2.getSSA()))
+				if(registerMap.containsKey(r2.toString()))
 				{
-					Result r = new Result(lValue.get(r2.GetName()).get(r2.getSSA()));
-					ins.setResult(2, r);
+					r2.setRegister(registerMap.get(r2.toString()));
 				}
-
-				if(r3.GetKind()==Result.Kind.VARIABLE)
+				
+				if(registerMap.containsKey(r3.toString()))
 				{
-					lValue.get(r3.GetName()).put(r3.getSSA(), r3);
-
-				}*/
+					r3.setRegister(registerMap.get(r3.toString()));
+				}
+				
+				if(bb.getType() == BasicBlock.BlockType.WHILE_MAIN)
+				{
+					BasicBlock lastWhileBody = bb.getWhileBodyLast();
+					BasicBlock parent = bb.getBranchParent();
+					
+					IcCodeGen icGen;
+					icGen = new IcCodeGen();
+					if(r1.GetKind()==Result.Kind.VARIABLE ||r1.GetKind()==Result.Kind.INSTRUCTION)
+						icGen.generate(r3, r1, Instruction.move, parent, c);
+					if(r2.GetKind()==Result.Kind.VARIABLE ||r2.GetKind()==Result.Kind.INSTRUCTION)
+						icGen.generate(r3, r2, Instruction.move, lastWhileBody, c);
+					it.remove();
+				}
+				
+				if(bb.getType() == BasicBlock.BlockType.JOIN)
+				{
+					ArrayList<BasicBlock> parents = bb.getParents();
+					BasicBlock elseBlk =parents.get(2);
+					BasicBlock ifBlk = parents.get(1);
+					System.out.println("SiZE:"+parents.size());
+					System.out.println(parents.get(2).GetId());
+					IcCodeGen icGen;
+					icGen = new IcCodeGen();
+					icGen.generate(r3, r1, Instruction.move, ifBlk, c);
+					icGen.generate(r3, r2, Instruction.move, elseBlk, c);
+					it.remove();
+				}
+				
+				
+				
 			}
 
 		}

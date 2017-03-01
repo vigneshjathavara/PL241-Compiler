@@ -28,33 +28,39 @@ class test
 	System.out.println(e);
 	return;
 	}
+   DotGen cfgg_b4cp = new DotGen("src/Display/CFG.gv");
+   cfgg_b4cp.generate(p.GetCFG());
+   System.out.println("CFG DONE!!");
+   
    
    //Prepare the dominator tree.
    DominatorTree dt = new DominatorTree(p.GetCFG());
    dt.CreateDominatorTree(p.GetCFG());
    
-   DotGen dtg_b4cp = new DotGen("src/Display/domTreeDotOutput_b4cp.gv");
+   System.out.println("DOM TREE DONE!!");
+   
+   
+   DotGen dtg_b4cp = new DotGen("src/Display/DomTree.gv");
    dtg_b4cp.generateDomTree(p.GetCFG());
    
-   DotGen cfgg_b4cp = new DotGen("src/Display/dotOutput_b4cp.gv");
-   cfgg_b4cp.generate(p.GetCFG());
+   
    
    //Copy Propagation is performed on the 
    CopyPropagation cp = new CopyPropagation();
    cp.CPOptimise(p.GetCFG());
    
-   DotGen cfgg_b4cse = new DotGen("src/Display/dotOutput_b4cse.gv");
+   DotGen cfgg_b4cse = new DotGen("src/Display/CFG_afterCP.gv");
    cfgg_b4cse.generate(p.GetCFG());
    
    CSEElimination cse = new CSEElimination();
    cse.CSEOptimise(p.GetCFG());
    
    //Compute the visual graph of CFG
-   DotGen cfgg = new DotGen("src/Display/dotOutput.gv");
+   DotGen cfgg = new DotGen("src/Display/CFG_afterCSE.gv");
    cfgg.generate(p.GetCFG());
    
    //compute visual graph of Dominator Tree
-   DotGen dtg = new DotGen("src/Display/domTreeDotOutput.gv");
+   DotGen dtg = new DotGen("src/Display/DomTree_afterCSE.gv");
    dtg.generateDomTree(p.GetCFG());   
    
    LiveRangeAnalyzer lra = new LiveRangeAnalyzer(p.GetCFG());
@@ -69,8 +75,49 @@ class test
    ReplaceWithRegisters rwr = new ReplaceWithRegisters();
    rwr.replace(p.GetCFG().GetRoot(), p.GetCFG(), gC.getRegisterMap());
    System.out.println("creating CFGWR");
-   DotGen CFGWR = new DotGen("src/Display/CFGWRDotOutput.gv");
+   DotGen CFGWR = new DotGen("src/Display/CFG_afterRegisterAllocation.gv");
    CFGWR.generateWithRegister(p.GetCFG()); 
+   
+   
+   
+   HashMap<String, CFG> functions = p.GetCFG().getFunctionList();
+   for(String fKey:functions.keySet())
+   {
+	   CFG c = functions.get(fKey);
+	   
+	   DotGen fcfgg_b4cp = new DotGen("src/Display/"+ fKey +"_b4opt.gv");
+	   fcfgg_b4cp.generate(c);
+	   
+	   DominatorTree fDT = new DominatorTree(c);
+	   fDT.CreateDominatorTree(c);
+	   
+	   CopyPropagation fcp = new CopyPropagation();
+	   fcp.CPOptimise(c);
+	   
+	   DotGen fcfgg_aftercp = new DotGen("src/Display/"+ fKey +"_aftercp.gv");
+	   fcfgg_aftercp.generate(c);
+	   
+	   CSEElimination fcse = new CSEElimination();
+	   fcse.CSEOptimise(c);
+	   
+	   LiveRangeAnalyzer flra = new LiveRangeAnalyzer(c);
+	   System.out.println("The Interference Graph:");
+	   flra.PrintInterferenceGraph();
+	   
+	   
+	   GraphColoring fgC = new GraphColoring();
+	   fgC.GreedyColoring(flra.getiG());
+	   fgC.printRegisters();
+	   
+	   ReplaceWithRegisters frwr = new ReplaceWithRegisters();
+	   frwr.replace(c.GetRoot(), c, fgC.getRegisterMap());
+	   System.out.println("creating CFGWR");
+	   DotGen FCFGWR = new DotGen("src/Display/" + fKey +".gv");
+	   FCFGWR.generateWithRegister(c); 
+	   
+   }
+   
+   
  } 
 	
 	/*
@@ -124,7 +171,7 @@ class test
    cfgg_b4cp.generate(p.GetCFG());
   
   
- }*/
- 
+ }
+ */
 	
 }

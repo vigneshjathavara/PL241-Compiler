@@ -54,6 +54,15 @@ public class Instruction
 
 
 	Result conditionInstruction;
+	public Result getConditionInstruction() {
+		return conditionInstruction;
+	}
+
+	public void setConditionInstruction(Result conditionInstruction) {
+		this.conditionInstruction = conditionInstruction;
+	}
+
+
 	int targetBlock;//target if branch
 	Type type;
 

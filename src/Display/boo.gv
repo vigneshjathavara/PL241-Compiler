@@ -1,0 +1,11 @@
+digraph structs {
+4 [shape=record,label="***Block: 4 ***\n14 : pop \n16 : pop \n42 : move R0 R0 \n"]
+5 [shape=record,label="***Block: 5 ***\nR2 : cmp #0 R1 \n20 : bge R2 [7]\n"]
+6 [shape=record,label="***Block: 6 ***\nR0 : mul R0 R0 \n23 : bra [5]\n43 : move R0 R0 \n"]
+7 [shape=record,label="***Block: 7 ***\nR0 : add R0 #4 \n26 : push R0\n"]
+4 -> 5;
+5 -> 6;
+6 -> 5;
+5 -> 7;
+
+}

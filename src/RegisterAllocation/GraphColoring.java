@@ -59,7 +59,8 @@ public class GraphColoring {
 	 */
 	    // Assign colors to remaining V-1 vertices
 	    Iterator<String> it = adjList.keySet().iterator();
-	    it.next();
+	    if(it.hasNext())
+	    	it.next();
 	    
 	    while(it.hasNext())//for (int u = 1; u < V; u++)
 	    {

@@ -851,6 +851,7 @@ Function : IfStatement
 			else
 			{
 				BasicBlock RejectedIfBlock = new BasicBlock(BasicBlock.BlockType.IF,bb.GetLatestVariableVersion(), bb.GetArrayTable(),null,null);
+				System.out.println("Rejected:"+RejectedIfBlock.GetId());
 				this.currentBlock = RejectedIfBlock;
 				statSequence(this.currentBlock,c);
 				this.currentBlock = parent;
@@ -865,6 +866,7 @@ Function : IfStatement
 			{
 				elseBlock = new BasicBlock(BasicBlock.BlockType.ELSE,bb.GetLatestVariableVersion(), bb.GetArrayTable(),parent,c);
 				this.currentBlock = elseBlock;
+				parent.SetRight(elseBlock);
 			}
 			if((r.GetKind() != Result.Kind.BOOLEAN))
 			{
@@ -881,6 +883,7 @@ Function : IfStatement
 				else
 				{
 					BasicBlock RejectedElseBlock = new BasicBlock(BasicBlock.BlockType.IF,bb.GetLatestVariableVersion(), bb.GetArrayTable(), null, null);
+					System.out.println("Rejected:"+RejectedElseBlock.GetId());
 					this.currentBlock = RejectedElseBlock;
 					statSequence(this.currentBlock,c);
 					this.currentBlock = parent;
@@ -913,7 +916,7 @@ Function : IfStatement
 			else
 			{
 				System.out.println("Else Block exits");
-				parent.SetRight(elseBlock);
+				
 				ifBlock.SetLeft(joinBlock);
 				elseBlock.SetLeft(joinBlock);
 				joinBlock.AddParent(ifBlock);
