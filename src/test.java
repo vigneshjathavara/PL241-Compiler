@@ -1,6 +1,7 @@
 import Display.DotGen;
 import Optimization.CSEElimination;
 import Optimization.CopyPropagation;
+import Optimization.DeadCodeElimination;
 import Parser.Parser;
 import RegisterAllocation.GraphColoring;
 import RegisterAllocation.LiveRangeAnalyzer;
@@ -9,8 +10,14 @@ import Structures.CFG;
 import Structures.DominatorTree;
 import Structures.InterferenceGraph;
 import Structures.Result;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import CodeGen.CodeGenerator;
+import DLX.dlx;
 
 class test
 {
@@ -28,6 +35,8 @@ class test
 	System.out.println(e);
 	return;
 	}
+   
+   
    DotGen cfgg_b4cp = new DotGen("src/Display/CFG.gv");
    cfgg_b4cp.generate(p.GetCFG());
    System.out.println("CFG DONE!!");
@@ -74,12 +83,42 @@ class test
    
    ReplaceWithRegisters rwr = new ReplaceWithRegisters();
    rwr.replace(p.GetCFG().GetRoot(), p.GetCFG(), gC.getRegisterMap());
+   
+   
    System.out.println("creating CFGWR");
    DotGen CFGWR = new DotGen("src/Display/CFG_afterRegisterAllocation.gv");
    CFGWR.generateWithRegister(p.GetCFG()); 
    
+   DeadCodeElimination dCE = new DeadCodeElimination();
+   dCE.eliminate(p.GetCFG().GetRoot(), p.GetCFG());
    
+   DotGen CFGWR_DcE = new DotGen("src/Display/CFG_afterDeadCodeElimination.gv");
+   CFGWR_DcE.generateWithRegister(p.GetCFG()); 
    
+   CodeGenerator cG = new CodeGenerator(p.GetCFG());
+   cG.generateCode(p.GetCFG().GetRoot(),null,false,null,false);
+   cG.FixUpArrays();
+   List<Integer> programCodes = cG.getProgramCodes();
+   int codes[] = new int[programCodes.size()];
+   System.out.println("Program  Codes");
+   for(int i=0;i<programCodes.size();i++)
+   {
+	   codes[i]=programCodes.get(i);
+	   System.out.println(codes[i]);
+   }
+   
+  
+   System.out.println("Test:");
+   dlx d = new dlx();
+   dlx.load(codes);
+  try{
+   dlx.execute();
+  }
+   catch(IOException e){
+		System.out.println(e);
+		return;
+		}
+   System.out.println(":Test");
    HashMap<String, CFG> functions = p.GetCFG().getFunctionList();
    for(String fKey:functions.keySet())
    {

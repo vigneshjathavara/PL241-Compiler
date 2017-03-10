@@ -126,10 +126,14 @@ public class ReplaceWithRegisters {
 					
 					IcCodeGen icGen;
 					icGen = new IcCodeGen();
-					if(r1.GetKind()==Result.Kind.VARIABLE ||r1.GetKind()==Result.Kind.INSTRUCTION)
+					ArrayList<Integer> instructions = lastWhileBody.GetInstructionList();
+					int branch_ins = instructions.get(instructions.size()-1);
+					instructions.remove(instructions.size()-1);
+					//if(r1.GetKind()==Result.Kind.VARIABLE ||r1.GetKind()==Result.Kind.INSTRUCTION)
 						icGen.generate(r3, r1, Instruction.move, parent, c);
-					if(r2.GetKind()==Result.Kind.VARIABLE ||r2.GetKind()==Result.Kind.INSTRUCTION)
+					//if(r2.GetKind()==Result.Kind.VARIABLE ||r2.GetKind()==Result.Kind.INSTRUCTION)
 						icGen.generate(r3, r2, Instruction.move, lastWhileBody, c);
+					instructions.add(branch_ins);
 					it.remove();
 				}
 				
@@ -142,11 +146,15 @@ public class ReplaceWithRegisters {
 					System.out.println(parents.get(2).GetId());
 					IcCodeGen icGen;
 					icGen = new IcCodeGen();
+					ArrayList<Integer> instructions = ifBlk.GetInstructionList();
+					int branch_ins = instructions.get(instructions.size()-1);
+					instructions.remove(instructions.size()-1);
 					icGen.generate(r3, r1, Instruction.move, ifBlk, c);
 					icGen.generate(r3, r2, Instruction.move, elseBlk, c);
+					instructions.add(branch_ins);
 					it.remove();
 				}
-				
+			
 				
 				
 			}

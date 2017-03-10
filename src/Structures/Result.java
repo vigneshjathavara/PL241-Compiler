@@ -8,6 +8,15 @@ public class Result
 
 	int value;//if constant 
 	String varName; // if variable
+	public String getVarName() {
+		return varName;
+	}
+
+
+	public void setVarName(String varName) {
+		this.varName = varName;
+	}
+
 	int ssa; //if variable
 	int instructionId; //if instruction 	
 	int blockId;

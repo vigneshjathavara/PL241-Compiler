@@ -51,6 +51,7 @@ public class LiveRangeAnalyzer {
 		ListIterator<Integer> li = iList.listIterator(iList.size());
 		ArrayList<String> leftPhi = new ArrayList<String>();
 		ArrayList<String> rightPhi = new ArrayList<String>();
+		ArrayList<String> mainPhi = new ArrayList<String>();
 		System.out.println("-----------------------------------------"+b.GetId()+"--------------------------------------");
 		while(li.hasPrevious())
 		{
@@ -94,7 +95,9 @@ public class LiveRangeAnalyzer {
 			
 			if(ins.GetOpCode()==Instruction.phi)
 			{
+				mainPhi.add(ins.GetResult(3).toString());
 				liveSet.remove(ins.GetResult(3).toString());
+				
 				Result left = ins.GetResult(1);
 				Result right = ins.GetResult(2);
 				iG.AddToGraph(liveSet);
@@ -198,11 +201,22 @@ public class LiveRangeAnalyzer {
 					}
 					if(cnt==1)
 					{
-						for(String s:leftPhi)
+						for(String s:leftPhi) 
 						{
 							ls.add(s);
 						}
+						for(String s:mainPhi)
+						{
+							ls.add(s);
+						}
+						
 						iG.AddToGraph(ls);
+						
+						for(String s:mainPhi)
+						{
+							ls.remove(s) ;
+						}
+						
 					}
 					
 					if(cnt==2)
@@ -211,7 +225,18 @@ public class LiveRangeAnalyzer {
 						{
 							ls.add(s);
 						}
+						
+						for(String s:mainPhi)
+						{
+							ls.add(s);
+						}
+						
 						iG.AddToGraph(ls);
+						
+						for(String s:mainPhi)
+						{
+							ls.remove(s);
+						}
 					}
 					cnt++;
 					ArrayList<String> temp = Analyze(bb,ls,c,b.getBranchParent(),true,null,false);

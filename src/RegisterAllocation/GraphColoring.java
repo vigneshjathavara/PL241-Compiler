@@ -36,7 +36,7 @@ public class GraphColoring {
 	    for(String str:adjList.keySet())
 	    {
 	    	if(i==0)
-	    		registerMap.put(str, 0);
+	    		registerMap.put(str, 1);
 	    	else
 	    		registerMap.put(str, -1);
 	    	
@@ -66,8 +66,8 @@ public class GraphColoring {
 	    {
 	        // Process all adjacent vertices and flag their colors
 	        // as unavailable
-	    	boolean available[]=new boolean[adjList.size()];
-	 	    for (int cr = 0; cr < size; cr++)
+	    	boolean available[]=new boolean[adjList.size()+1];
+	 	    for (int cr = 1; cr <= size; cr++)
 	 	        available[cr] = false;
 	    	
 	    	String s = it.next();
@@ -78,7 +78,7 @@ public class GraphColoring {
 	 
 	        // Find the first available color
 	        int cr;
-	        for (cr = 0; cr < size; cr++)
+	        for (cr = 1; cr <= size; cr++)
 	            if (available[cr] == false)
 	                break;
 	 

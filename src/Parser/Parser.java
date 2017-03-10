@@ -813,11 +813,11 @@ Function : IfStatement
 		//System.out.println("ifStatement Enter");
 
 		BasicBlock parent = this.currentBlock;
-
+	
 		Result r =relation(bb,c);
 
 
-
+		BasicBlock elseTop=null;
 
 
 		BasicBlock ifBlock = null;
@@ -865,6 +865,7 @@ Function : IfStatement
 			if(r.GetKind() != Result.Kind.BOOLEAN)
 			{
 				elseBlock = new BasicBlock(BasicBlock.BlockType.ELSE,bb.GetLatestVariableVersion(), bb.GetArrayTable(),parent,c);
+				elseTop = elseBlock;
 				this.currentBlock = elseBlock;
 				parent.SetRight(elseBlock);
 			}
@@ -922,12 +923,14 @@ Function : IfStatement
 				joinBlock.AddParent(ifBlock);
 				joinBlock.AddParent(elseBlock);
 				joinBlock.setBranchParent(parent);//---------
-				c.FixUp(r.GetInstructionId(),elseBlock.GetId());
+				c.FixUp(r.GetInstructionId(),elseTop.GetId());
 				
 				new PhiGen().Phi_if(ifBlock, elseBlock, joinBlock, icGen, c);
 			}
-
+			icGen.generate(joinBlock.GetId(), Instruction.bra, ifBlock, c);
 			this.currentBlock = joinBlock;
+			parent.setIfJoin(joinBlock);
+			parent.setType(BasicBlock.BlockType.IF_MAIN);
 		}
 		System.out.println("IfStatement End");
 
@@ -1056,6 +1059,7 @@ Function : WhileStatement
 		c.FixUp(r.GetInstructionId(), whileJoin.GetId());
 		
 		this.currentBlock = whileJoin;
+		whileMain.setWhileJoin(whileJoin);
 		System.out.println("WhileStatement End");
 	}
 

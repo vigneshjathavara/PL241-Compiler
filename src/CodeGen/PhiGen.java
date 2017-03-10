@@ -132,6 +132,18 @@ public class PhiGen
 					}
 				}
 			}
+			
+			else if(opCode == Instruction.write)
+			{
+				Result r = ins.getW();
+				if(r.GetKind()==Result.Kind.VARIABLE)
+				{
+					if(phiVariables.contains(r.GetName()) && r.getSSA()==parent.GetLastestSSAOf(r.GetName()))
+					{
+						r.SetSSA(c.GetLatestSSA(r.GetName()));
+					}
+				}
+			}
 
 			else if(opCode == Instruction.phi)
 			{

@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class BasicBlock
 {	
-  public enum BlockType{ ROOT, JOIN, FUNCTION,IF,ELSE,WHILE_MAIN, WHILE_JOIN,WHILE_BODY, NORMAL}
+  public enum BlockType{ ROOT, JOIN, FUNCTION,IF,ELSE,WHILE_MAIN, WHILE_JOIN,WHILE_BODY, NORMAL,IF_MAIN}
   
   static int bbcounter=0; 
 
@@ -17,7 +17,29 @@ public class BasicBlock
   BasicBlock rightBlock;
   private BasicBlock branchParent;
   private BasicBlock whileBodyLast;
-  ArrayList<BasicBlock> dominates;
+  
+  BasicBlock ifJoin;
+  public BasicBlock getIfJoin() {
+	return ifJoin;
+}
+
+public void setIfJoin(BasicBlock ifJoin) {
+	this.ifJoin = ifJoin;
+}
+
+BasicBlock whileJoin;
+  
+  public BasicBlock getWhileJoin() 
+  {
+	return whileJoin;
+  }
+
+public void setWhileJoin(BasicBlock whileJoin) 
+	{
+		this.whileJoin = whileJoin;
+	}
+
+ArrayList<BasicBlock> dominates;
   BasicBlock dominator;
   private ArrayList<BasicBlock> parents;
   private BlockType type;

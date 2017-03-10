@@ -1,4 +1,0 @@
-digraph structs {
-2 [shape=record,label="***Block: 2 ***\n4 : pop \n5 : move (4) a0 \n6 : move #1 b0 \n7 : move #1 c0 \n8 : move b0 y1 \n"]
-
-}
