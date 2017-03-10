@@ -73,13 +73,13 @@ class test
    dtg.generateDomTree(p.GetCFG());   
    
    LiveRangeAnalyzer lra = new LiveRangeAnalyzer(p.GetCFG());
-   System.out.println("The Interference Graph:");
-   lra.PrintInterferenceGraph();
+  // System.out.println("The Interference Graph:");
+   //lra.PrintInterferenceGraph();
    
    
    GraphColoring gC = new GraphColoring();
    gC.GreedyColoring(lra.getiG());
-   gC.printRegisters();
+   //gC.printRegisters();
    
    ReplaceWithRegisters rwr = new ReplaceWithRegisters();
    rwr.replace(p.GetCFG().GetRoot(), p.GetCFG(), gC.getRegisterMap());
@@ -104,11 +104,11 @@ class test
    for(int i=0;i<programCodes.size();i++)
    {
 	   codes[i]=programCodes.get(i);
-	   System.out.println(codes[i]);
+	   //System.out.println(codes[i]);
    }
    
   
-   System.out.println("Test:");
+   System.out.println("*******Execution Begin*********");
    dlx d = new dlx();
    dlx.load(codes);
   try{
@@ -118,7 +118,7 @@ class test
 		System.out.println(e);
 		return;
 		}
-   System.out.println(":Test");
+   System.out.println("\n*******Execution End*********");
    HashMap<String, CFG> functions = p.GetCFG().getFunctionList();
    for(String fKey:functions.keySet())
    {

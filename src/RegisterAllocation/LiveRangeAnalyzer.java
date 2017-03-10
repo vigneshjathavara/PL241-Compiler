@@ -40,7 +40,7 @@ public class LiveRangeAnalyzer {
 		if(flag && b==stop)
 			{
 			
-			System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQ"+b.GetId()+"QQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+			//System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQ"+b.GetId()+"QQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
 			return liveSet;
 			}
 		
@@ -52,7 +52,7 @@ public class LiveRangeAnalyzer {
 		ArrayList<String> leftPhi = new ArrayList<String>();
 		ArrayList<String> rightPhi = new ArrayList<String>();
 		ArrayList<String> mainPhi = new ArrayList<String>();
-		System.out.println("-----------------------------------------"+b.GetId()+"--------------------------------------");
+		//System.out.println("-----------------------------------------"+b.GetId()+"--------------------------------------");
 		while(li.hasPrevious())
 		{
 			Instruction ins = c.GetInstruction(li.previous());
@@ -181,14 +181,14 @@ public class LiveRangeAnalyzer {
 		
 		if(flag2 && b==retBlk)
 		{
-			System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWW"+b.GetId()+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+			//System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWW"+b.GetId()+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 			return liveSet;
 		}
 		if(b.getType() == BasicBlock.BlockType.JOIN || b.getType() == BasicBlock.BlockType.WHILE_MAIN )
 		{
 			if(b.getType() == BasicBlock.BlockType.JOIN)
 			{
-				System.out.println("JOIN BLK  " + b.GetId() + " "+b.getType());
+				//System.out.println("JOIN BLK  " + b.GetId() + " "+b.getType());
 				ArrayList<BasicBlock> parents = b.getParents();
 				int cnt =1;
 				ArrayList<String> lsu = new ArrayList<String>();
@@ -254,9 +254,9 @@ public class LiveRangeAnalyzer {
 			
 			else
 			{
-				System.out.println("WHILE MAIN BLK  " + b.GetId() + " "+b.getType());
+				//System.out.println("WHILE MAIN BLK  " + b.GetId() + " "+b.getType());
 				ArrayList<BasicBlock> parents = b.getParents();
-				System.out.println("while main parents:"+parents.size());
+				//System.out.println("while main parents:"+parents.size());
 				ArrayList<String> ls = new ArrayList<String>();
 				for(String str:liveSet)
 				{
@@ -271,7 +271,7 @@ public class LiveRangeAnalyzer {
 				
 				for(BasicBlock bb: parents)
 				{
-					System.out.println("while main parent:"+bb.GetId());
+					//System.out.println("while main parent:"+bb.GetId());
 					ls = new ArrayList<String>();
 					for(String str:temp)
 					{

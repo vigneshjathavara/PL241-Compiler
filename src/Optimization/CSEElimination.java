@@ -20,7 +20,7 @@ public class CSEElimination {
 
 		ArrayList<Integer> instructions= c.GetRoot().GetInstructionList();
 		Iterator<Integer> it = instructions.iterator();
-		System.out.println("***************************CSE*********************");
+		//System.out.println("***************************CSE*********************");
 		while(it.hasNext())
 		{
 			int key = (int) it.next();
@@ -33,7 +33,7 @@ public class CSEElimination {
 				{
 					int ignoreInsNo =  (int) it.next();
 					Instruction ignoreIns = c.GetInstruction(ignoreInsNo);
-					System.out.println(ignoreIns.toString());
+					//System.out.println(ignoreIns.toString());
 					while(ignoreIns.GetOpCode()!= Instruction.load && ignoreIns.GetOpCode()!= Instruction.store)
 					{
 						ignoreInsNo =  (int) it.next();
@@ -82,7 +82,7 @@ public class CSEElimination {
 				for(int i : instructionMap.keySet())
 				{
 					Instruction ins = instructionMap.get(i);
-					System.out.println("E:"+key+" I:"+i);
+					//System.out.println("E:"+key+" I:"+i);
 					if(insE.GetOpCode() >= Instruction.add && insE.GetOpCode() <=Instruction.div)
 					{
 						//System.out.println("opCode safe");
@@ -92,9 +92,9 @@ public class CSEElimination {
 
 							if((insE.GetResult(1).toString().compareTo(ins.GetResult(1).toString())==0 && insE.GetResult(1).toString().compareTo(ins.GetResult(1).toString())==0)||(insE.GetResult(1).toString().compareTo(ins.GetResult(2).toString())==0 && insE.GetResult(2).toString().compareTo(ins.GetResult(1).toString())==0))
 							{
-								System.out.println("Entered");
-								System.out.println(ins.toString());
-								System.out.println(insE.toString());
+								//System.out.println("Entered");
+								//System.out.println(ins.toString());
+								//System.out.println(insE.toString());
 								instructionReplaceMap.put(insE.GetId(), ins.GetId());
 								it.remove();
 								flag =true;

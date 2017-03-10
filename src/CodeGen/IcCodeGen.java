@@ -47,7 +47,7 @@ public class IcCodeGen
 			else 
 			{
 				Instruction i = new Instruction(Instruction.Type.NORMAL, r1,r2,opCode ,c, bb);
-				System.out.println("Instruction : " + i.toString());
+				//System.out.println("Instruction : " + i.toString());
 				res = new Result(Result.Kind.INSTRUCTION,i.GetId());
 			}
 
@@ -60,7 +60,7 @@ public class IcCodeGen
 		if(opCode == Instruction.move)
 		{
 			Instruction i = new Instruction(Instruction.Type.NORMAL, r2,r1,opCode,c,bb);
-			System.out.println("Instruction : " + i.toString());
+			//System.out.println("Instruction : " + i.toString());
 			res = new Result(Result.Kind.INSTRUCTION, i.GetId());		
 			return res;
 		}
@@ -68,7 +68,7 @@ public class IcCodeGen
 		if(opCode == Instruction.end)
 		{
 			Instruction i = new Instruction(Instruction.Type.END,Instruction.end,c,bb);
-			System.out.println("Instruction : " + i.toString());
+			//System.out.println("Instruction : " + i.toString());
 			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
 			return res;
 		}
@@ -76,7 +76,7 @@ public class IcCodeGen
 		if(opCode == Instruction.writeNL)
 		{
 			Instruction i = new Instruction(Instruction.Type.WRITENL,Instruction.writeNL,c,bb);
-			System.out.println("Instruction : " + i.toString());
+			//System.out.println("Instruction : " + i.toString());
 			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
 			return res;
 		}
@@ -84,7 +84,7 @@ public class IcCodeGen
 		if(opCode == Instruction.read)
 		{
 			Instruction i = new Instruction(Instruction.Type.READ,Instruction.read,c,bb);
-			System.out.println("Instruction : " + i.toString());
+			//System.out.println("Instruction : " + i.toString());
 			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
 			return res;
 		}
@@ -92,7 +92,7 @@ public class IcCodeGen
 		else if(opCode == Instruction.marker)
 		{
 			Instruction i=new Instruction(Instruction.Type.MARKER, r1, Instruction.marker,c,bb);
-			System.out.println("Instruction : " + i.toString());
+			//System.out.println("Instruction : " + i.toString());
 			res = new Result(Result.Kind.INSTRUCTION, i.GetId());
 			return res;
 		}
@@ -120,7 +120,7 @@ public class IcCodeGen
 		if(opCode == Instruction.phi)
 		{
 			Instruction i = new Instruction(Instruction.Type.PHI, r1,r2, r3, opCode ,c, bb);
-			System.out.println("Instruction : " + i.toString());
+			//System.out.println("Instruction : " + i.toString());
 			//res = new Result(Result.Kind.INSTRUCTION,i.GetId());
 			
 		}
@@ -153,7 +153,7 @@ public class IcCodeGen
 			i =new Instruction(Instruction.Type.CBRANCH,r1,opCode,c,bb);//conditional branch
 		else
 			i = new Instruction(Instruction.Type.NORMAL,r1,opCode,c,bb);//load
-		System.out.println("Instruction : " + i.toString());
+		//System.out.println("Instruction : " + i.toString());
 		res = new Result(Result.Kind.INSTRUCTION,i.GetId());
 		return res;
 
@@ -164,7 +164,7 @@ public class IcCodeGen
 	public Result generate(int blockId, int opCode, BasicBlock bb, CFG c )
 	{
 		Instruction i = new Instruction(Instruction.Type.UBRANCH, blockId, opCode, c, bb);
-		System.out.println("Instruction : " + i.toString());
+		//System.out.println("Instruction : " + i.toString());
 		Result res = new Result(Result.Kind.INSTRUCTION,i.GetId());
 		return res;
 	}
@@ -187,13 +187,13 @@ public class IcCodeGen
 			for(int i =0; i<loc.size()-1;i++)
 			{
 				int num=1;
-				System.out.println("generate Test1");
+				//System.out.println("generate Test1");
 				for(int j=i+1; j<dims.size();j++)
 				{
-					System.out.println("generate Test");
+					//System.out.println("generate Test");
 					num*=dims.get(j);
 				}
-				System.out.println("generate Test2");
+				//System.out.println("generate Test2");
 				Result temp = new Result(Result.Kind.CONSTANT,num);
 				
 				if(i>0)

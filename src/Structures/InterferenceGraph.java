@@ -31,14 +31,14 @@ public class InterferenceGraph {
 	
 	public void AddToGraph(ArrayList<String> liveSet)
 	{
-		System.out.print("LiveSet:");
-		System.out.println(liveSet);
+		//System.out.print("LiveSet:");
+		//System.out.println(liveSet);
 		for(String r:liveSet)
 		{
 			boolean flag = false;
 			if( !adjacencyList.containsKey(r))
 			{
-				System.out.println("New entry");
+				//System.out.println("New entry");
 				adjacencyList.put(r, new ArrayList<String>());
 			}
 		}

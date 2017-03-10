@@ -103,7 +103,7 @@ public class CFG
 
 	public void AddInstruction(int id, Instruction i)
 	{
-		System.out.println("Adding Instruction to CFG : " + i.GetId() + "->" + i.toString());
+		//System.out.println("Adding Instruction to CFG : " + i.GetId() + "->" + i.toString());
 		instructionList.put(id,i);
 	}
 

@@ -104,7 +104,7 @@ Function : VarDecl
 
 	void varDecl(BasicBlock bb, CFG c)
 	{
-		System.out.println("VarDecl Enter");
+		//System.out.println("VarDecl Enter");
 		ArrayList<Integer> dims = new ArrayList<Integer>();
 		int varOrArray = typeDecl(bb,c,dims);
 		//scn.Next();
@@ -143,7 +143,7 @@ Function : VarDecl
 			scn.Error("Semi Colon Not Found");
 			return;
 		}
-		System.out.println("VarDecl End");
+		//System.out.println("VarDecl End");
 	}
 
 	/***********************************************************************************************
@@ -233,7 +233,7 @@ Function : FuncDecl
 
 	void funcDecl(BasicBlock bb, CFG c)
 	{
-		System.out.println("FuncDecl Enter");
+		//System.out.println("FuncDecl Enter");
 		
 		
 		boolean returns =false;
@@ -283,7 +283,7 @@ Function : FuncDecl
 			f.AddNewVariable(key);
 			
 			int ssa = f.AddNewSSA(key);
-			System.out.println("Variable:"+key+" ssa:"+ssa);
+			//System.out.println("Variable:"+key+" ssa:"+ssa);
 			root.AddNewSSA(key, ssa);
 		}
 		
@@ -305,7 +305,7 @@ Function : FuncDecl
 		scn.Next();	
 		f.setTail(this.currentBlock);
 		this.currentBlock = parent;
-		System.out.println("FuncDecl End");
+		//System.out.println("FuncDecl End");
 	}
 
 	/***********************************************************************************************
@@ -314,21 +314,21 @@ Function : FormalParam
 
 	void formalParam(BasicBlock bb, CFG c)
 	{
-		System.out.println("formalParam Enter");
+		//System.out.println("formalParam Enter");
 		scn.Next();
 		if(scn.sym==Scanner.ident)
 		{	
 			String name= scn.Id2String(scn.id);
 			//name += "_p";
-			System.out.println("Test0");
+			//System.out.println("Test0");
 			bb.AddNewVariable(name);
 			c.AddNewVariable(name);
 			c.AddNewParam(name);
 			int ssa = c.AddNewSSA(name);
-			System.out.println("Variable:"+name+" ssa:"+ssa);
+			//System.out.println("Variable:"+name+" ssa:"+ssa);
 			bb.AddNewSSA(name, ssa);
 			
-			System.out.println("Formal Param Test1");
+			//System.out.println("Formal Param Test1");
 			scn.Next();
 			while(scn.sym == Scanner.commaToken)
 			{
@@ -344,7 +344,7 @@ Function : FormalParam
 				c.AddNewVariable(name);
 				c.AddNewParam(name);
 				ssa = c.AddNewSSA(name);
-				System.out.println("Variable:"+name+" ssa:"+ssa);
+			//	System.out.println("Variable:"+name+" ssa:"+ssa);
 				bb.AddNewSSA(name, ssa);
 				scn.Next();
 			}
@@ -354,7 +354,7 @@ Function : FormalParam
 			scn.Error("Close Paren  Not Found");
 			return;
 		}
-		System.out.println("formalParam End");
+		//System.out.println("formalParam End");
 	}
 
 
@@ -364,7 +364,7 @@ Function : FuncBody
 
 	void funcBody(BasicBlock bb, CFG c)
 	{
-		System.out.println("FuncBody Enter");
+		//System.out.println("FuncBody Enter");
 		while(scn.sym == Scanner.varToken || scn.sym == Scanner.arrToken) //var|array
 		{
 			varDecl(bb,c);
@@ -391,18 +391,18 @@ Function : FuncBody
 
 		
 		scn.Next();
-		System.out.println("Test2");
+		//System.out.println("Test2");
 		if(scn.sym == Scanner.letToken ||scn.sym == Scanner.callToken||scn.sym == Scanner.ifToken||scn.sym == Scanner.whileToken||scn.sym == Scanner.returnToken)
 		{	
 			statSequence(bb,c);
 		}
-		System.out.println("Test3");
+		//System.out.println("Test3");
 		if(scn.sym != Scanner.endToken)
 		{
 			scn.Error("End Token  Not Found");
 			return;
 		}
-		System.out.println("FuncBody End");
+		//System.out.println("FuncBody End");
 
 	}
 
@@ -412,12 +412,12 @@ Function : StatSequence
 
 	void statSequence(BasicBlock bb, CFG c)
 	{
-		System.out.println("StatSequence Enter  :" +this.currentBlock.GetId() );
+		//System.out.println("StatSequence Enter  :" +this.currentBlock.GetId() );
 		//if(scn.sym == scn.letToken ||scn.sym == scn.callToken||scn.sym == scn.ifToken||scn.sym == scn.whileToken||scn.sym == scn.returnToken)
 		//{
 		statement(this.currentBlock,c);
 		//scn.Next();
-		System.out.println("StatSequence Test1");
+		//System.out.println("StatSequence Test1");
 		while(scn.sym == Scanner.semiToken)
 		{
 			scn.Next();
@@ -432,7 +432,7 @@ Function : StatSequence
 		//scn.Error("Statement  Not Found");
 		//  return;
 		//}
-		System.out.println("StatSequence End");
+		//System.out.println("StatSequence End");
 
 	}
 	/***********************************************************************************************
@@ -442,7 +442,7 @@ Function : Statement
 
 	void statement(BasicBlock bb, CFG c)
 	{
-		System.out.println("Statement Enter");
+		//System.out.println("Statement Enter");
 
 		if(scn.sym ==  Scanner.letToken)
 		{
@@ -494,12 +494,12 @@ Function : Assignment
 
 	void assignment(BasicBlock bb, CFG c)
 	{
-		System.out.println("Assignment Enter");
+		//System.out.println("Assignment Enter");
 
 		//ArrayList<Result> dims = new ArrayList<Result>();
 		Result r1 = designator(this.currentBlock, c);
 		
-		System.out.println("Assignment Test1 :"+ r1.toString());
+	//	System.out.println("Assignment Test1 :"+ r1.toString());
 		
 		if(scn.sym != Scanner.becomesToken)
 		{
@@ -508,16 +508,16 @@ Function : Assignment
 		}
 		scn.Next();
 		
-		System.out.println("Assignment Test2");
+		//System.out.println("Assignment Test2");
 		
 		Result r2 = expression(this.currentBlock,c);
 		
-		System.out.println("Assignment Test3 :"+ r2.toString());
+	//	System.out.println("Assignment Test3 :"+ r2.toString());
 		
 		
 		if(r1.GetKind()==Result.Kind.VARIABLE)
 		{
-			System.out.println("Assignment Test4");
+			//System.out.println("Assignment Test4");
 			
 			int ssa = c.AddNewSSA(r1.GetName());
 			r1.SetSSA(ssa);
@@ -528,11 +528,11 @@ Function : Assignment
 
 		else
 		{
-			System.out.println("Assignment Test5");
+			//System.out.println("Assignment Test5");
 			
 			r1 = icGen.generate(r1, bb, c);
 			
-			System.out.println("Assignment Test6");
+			//System.out.println("Assignment Test6");
 			
 			icGen.generate(r2, r1, Instruction.store, this.currentBlock, c);
 
@@ -632,7 +632,7 @@ Function : FuncCall
 
 	Result funcCall(BasicBlock bb, CFG c)
 	{
-		System.out.println("FuncCall Enter");
+		//System.out.println("FuncCall Enter");
 		/*	if(scn.sym != scn.callToken)
 			{
 			scn.Error("Call Token  Not Found");
@@ -647,7 +647,7 @@ Function : FuncCall
 			return null;
 		}
 		
-		System.out.println("Function being called:" + scn.Id2String(scn.id));
+	//	System.out.println("Function being called:" + scn.Id2String(scn.id));
 		
 		if(scn.Id2String(scn.id).compareTo("OutputNum")==0)
 		{
@@ -726,7 +726,7 @@ Function : FuncCall
 		BasicBlock fTail = fCFG.getTail();
 		BasicBlock fRoot = fCFG.GetRoot();
 		
-		System.out.println("Root:" +fRoot.GetId()+" Tail:" + fTail.GetId());
+		//System.out.println("Root:" +fRoot.GetId()+" Tail:" + fTail.GetId());
 		
 		scn.Next();
 		if(scn.sym == Scanner.openparenToken)
@@ -762,14 +762,14 @@ Function : FuncCall
 		}
 		
 		
-		System.out.println("FuncCall Test1");
+	//	System.out.println("FuncCall Test1");
 		
 		Result r = icGen.generate(fRoot.GetId(), Instruction.bra, bb, c);
 		
-		System.out.println("FuncCall Test2");
+		//System.out.println("FuncCall Test2");
 		//BasicBlock fJoin = new BasicBlock(BasicBlock.BlockType.NORMAL, bb.GetLatestVariableVersion(), bb.GetArrayTable(),bb, c );
 		//this.currentBlock = fJoin;
-		System.out.println("FuncCall Test3");
+	//	System.out.println("FuncCall Test3");
 		//bb.SetLeft(fJoin);
 		
 		/*
@@ -791,13 +791,13 @@ Function : FuncCall
 		if(fCFG.isReturns())
 		{
 			Result r2 = icGen.generate(null,Instruction.pop, bb, c);
-			System.out.println("Return");
+			//System.out.println("Return");
 			return r2;
 			
 		}
 		
 		else{
-			System.out.println("No Return");
+			//System.out.println("No Return");
 			return null;
 		}
 			
@@ -851,7 +851,7 @@ Function : IfStatement
 			else
 			{
 				BasicBlock RejectedIfBlock = new BasicBlock(BasicBlock.BlockType.IF,bb.GetLatestVariableVersion(), bb.GetArrayTable(),null,null);
-				System.out.println("Rejected:"+RejectedIfBlock.GetId());
+				//System.out.println("Rejected:"+RejectedIfBlock.GetId());
 				this.currentBlock = RejectedIfBlock;
 				statSequence(this.currentBlock,c);
 				this.currentBlock = parent;
@@ -884,7 +884,7 @@ Function : IfStatement
 				else
 				{
 					BasicBlock RejectedElseBlock = new BasicBlock(BasicBlock.BlockType.IF,bb.GetLatestVariableVersion(), bb.GetArrayTable(), null, null);
-					System.out.println("Rejected:"+RejectedElseBlock.GetId());
+					//System.out.println("Rejected:"+RejectedElseBlock.GetId());
 					this.currentBlock = RejectedElseBlock;
 					statSequence(this.currentBlock,c);
 					this.currentBlock = parent;
@@ -916,7 +916,7 @@ Function : IfStatement
 			}
 			else
 			{
-				System.out.println("Else Block exits");
+				//System.out.println("Else Block exits");
 				
 				ifBlock.SetLeft(joinBlock);
 				elseBlock.SetLeft(joinBlock);
@@ -932,7 +932,7 @@ Function : IfStatement
 			parent.setIfJoin(joinBlock);
 			parent.setType(BasicBlock.BlockType.IF_MAIN);
 		}
-		System.out.println("IfStatement End");
+	//	System.out.println("IfStatement End");
 
 	}
 
@@ -942,7 +942,7 @@ Function : WhileStatement
 
 	void whileStatement(BasicBlock bb, CFG c)
 	{
-		System.out.println("WhileStatement Enter");
+		//System.out.println("WhileStatement Enter");
 
 
 
@@ -986,7 +986,7 @@ Function : WhileStatement
 
 			if(r.GetFlag())
 			{
-				System.out.println("Infinite");
+				//System.out.println("Infinite");
 				scn.Error("Infinite Loop Encountered");
 				//statSequence(this.currentBlock,c);
 
@@ -994,7 +994,7 @@ Function : WhileStatement
 
 			else
 			{
-				System.out.println("Warning :Loop Body Never Reached");
+				//System.out.println("Warning :Loop Body Never Reached");
 				BasicBlock rejectedWhileBody = new BasicBlock(BasicBlock.BlockType.WHILE_BODY, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), null, null);
 				this.currentBlock = rejectedWhileBody;
 				statSequence(rejectedWhileBody,c);
@@ -1047,20 +1047,20 @@ Function : WhileStatement
 		ArrayList<String> phiVariables = pgen.Phi_if(parent, whileBodyLast, whileMain, icGen, c);
 		
 		
-		for(String str:phiVariables)
-				System.out.print(str+" ");
+		/*for(String str:phiVariables)
+				System.out.print(str+" ");*/
 		ArrayList<Integer> visited = new ArrayList<Integer>();
 		visited.add(whileMain.GetId());
-		System.out.println("WhileStatement Test1:" +bb.GetId());
+		//System.out.println("WhileStatement Test1:" +bb.GetId());
 		pgen.PropagatePhi(phiVariables, whileBody,parent,c,visited);
-		System.out.println("WhileStatement Test2");
+	//	System.out.println("WhileStatement Test2");
 		BasicBlock whileJoin = new BasicBlock(BasicBlock.BlockType.WHILE_JOIN, whileMain.GetLatestVariableVersion(), whileMain.GetArrayTable(), whileMain,c);
 		whileMain.SetRight(whileJoin);
 		c.FixUp(r.GetInstructionId(), whileJoin.GetId());
 		
 		this.currentBlock = whileJoin;
 		whileMain.setWhileJoin(whileJoin);
-		System.out.println("WhileStatement End");
+		//System.out.println("WhileStatement End");
 	}
 
 	/***********************************************************************************************
@@ -1069,7 +1069,7 @@ Function : returnStatement
 
 	void returnStatement(BasicBlock bb, CFG c)
 	{
-		System.out.println("returnStatement Enter");
+	//	System.out.println("returnStatement Enter");
 		//System.out.println("Return to:"+ c.getReturnTo());
 		
 		
@@ -1084,7 +1084,7 @@ Function : returnStatement
 			Result res = expression(bb,c);
 			icGen.generate(res,Instruction.push, bb, c);
 		} 
-		System.out.println("returnStatement End");
+	//	System.out.println("returnStatement End");
 	}
 
 	/***********************************************************************************************

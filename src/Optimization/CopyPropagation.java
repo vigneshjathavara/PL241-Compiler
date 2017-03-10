@@ -122,9 +122,9 @@ public class CopyPropagation
 				Result r1 = ins.GetResult(1);
 				Result r2 = ins.GetResult(2);
 				
-				System.out.println(r1.GetName()+" "+r1.GetKind() +" "+r1.toString());
-				System.out.println(lValue.toString());
-				System.out.println(r2.toString());
+				//System.out.println(r1.GetName()+" "+r1.GetKind() +" "+r1.toString());
+				//System.out.println(lValue.toString());
+				//System.out.println(r2.toString());
 				
 				if(r1.GetKind()==Result.Kind.VARIABLE && lValue.get(r1.GetName()).containsKey(r1.getSSA()))
 				{

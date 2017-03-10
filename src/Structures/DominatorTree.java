@@ -41,7 +41,7 @@ public class DominatorTree
 			visited.add(key);
 			
 			FindUnreachableBlocks(c.GetRoot(),reachableBlocks,visited);
-			System.out.println("\"" + key + "\"" + reachableBlocks.toString());
+			//System.out.println("\"" + key + "\"" + reachableBlocks.toString());
 			reachableOnlyMap.put(key, reachableBlocks);
 			
 			ArrayList<Integer> reachableOnly = new ArrayList<Integer>();
@@ -62,7 +62,7 @@ public class DominatorTree
 		
 		
 		
-		System.out.println(domMap.toString());
+		//System.out.println(domMap.toString());
 		
 		ArrayList<Integer> added = new ArrayList<Integer>();
 		while(domMap.size()!=0)
@@ -76,7 +76,7 @@ public class DominatorTree
 					blockId = key;
 					BasicBlock bb = c.GetBasicBlock(key);
 					bb.AddDominatorChild(c.GetBasicBlock(children.get(0)));
-					System.out.print(bb.GetId() + "->");
+					//System.out.print(bb.GetId() + "->");
 					//domMap.remove(key);
 					for(int k : domMap.keySet())
 					{
@@ -98,7 +98,7 @@ public class DominatorTree
 							if(!added.contains(childList.get(0)))
 							{
 							added.add(childList.get(0));	
-							System.out.println(childList.get(0));
+							//System.out.println(childList.get(0));
 							bb.AddDominatorChild(c.GetBasicBlock(childList.get(0)));
 							}
 						}

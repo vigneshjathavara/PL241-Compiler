@@ -186,9 +186,9 @@ public class DotGen
 		printer.print(bb.GetId() + " [shape=record,label=\"");
 		printer.print("***Block: " + bb.GetId() + " ***\\n" );
 		ArrayList<Integer> list = bb.GetInstructionList();
-		System.out.println();
-		System.out.println("***Block: " + bb.GetId() + " ***\\n");
-		System.out.println();
+		//System.out.println();
+		//System.out.println("***Block: " + bb.GetId() + " ***\\n");
+		//System.out.println();
 		
 		for(int key :list)
 		{
@@ -197,7 +197,7 @@ public class DotGen
 				printer.print(i.toStringWithRegister());
 				printer.print("\\n");
 				
-				System.out.println(i.toStringWithRegister());
+				//System.out.println(i.toStringWithRegister());
 			
 		}
 		printer.println("\"]");

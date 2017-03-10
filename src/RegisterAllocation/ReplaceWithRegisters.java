@@ -142,8 +142,8 @@ public class ReplaceWithRegisters {
 					ArrayList<BasicBlock> parents = bb.getParents();
 					BasicBlock elseBlk =parents.get(2);
 					BasicBlock ifBlk = parents.get(1);
-					System.out.println("SiZE:"+parents.size());
-					System.out.println(parents.get(2).GetId());
+					//System.out.println("SiZE:"+parents.size());
+					//System.out.println(parents.get(2).GetId());
 					IcCodeGen icGen;
 					icGen = new IcCodeGen();
 					ArrayList<Integer> instructions = ifBlk.GetInstructionList();

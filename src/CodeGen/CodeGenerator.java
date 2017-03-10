@@ -64,11 +64,11 @@ public class CodeGenerator {
 		}
 		
 		
-		for(String s : array_baseAddress.keySet())
+		/*for(String s : array_baseAddress.keySet())
 		{
 			System.out.println(s +" "+array_baseAddress.get(s));
 		}
-		
+		*/
 		int code = dlx.assemble(16, 28, 0 ,0);
 		addCodeToProgram(code);
 	}
@@ -137,14 +137,14 @@ public class CodeGenerator {
 	
 	public void addCodeToProgram(int code)
 	{
-		System.out.println("Code being added: "+code);
+		//System.out.println("Code being added: "+code);
 		programCodes.add(code);
 		codeNumber++;
 	}
 	
 	public void updateCodeIntheProgram(int code, int position)
 	{
-		System.out.println("Code being updated: "+code +" At pos: "+position);
+		//System.out.println("Code being updated: "+code +" At pos: "+position);
 		if(position < 0 || position >= programCodes.size()){
 			error("WRONG_FIXUP_LOCATION");
 			return;
@@ -155,12 +155,12 @@ public class CodeGenerator {
 	
 	public void generateCodeForBlockBody(BasicBlock basicBlock){
 		
-		System.out.println("Generating code for:" + basicBlock.GetId());
+		//System.out.println("Generating code for:" + basicBlock.GetId());
 		blockVsCodeNumber.put(basicBlock.GetId(), codeNumber);
 		ArrayList<Integer> instructions = basicBlock.GetInstructionList();
 		for(int instructionId : instructions){
 			Instruction ins = cfg.GetInstruction(instructionId);
-			System.out.println(ins.toString());
+			//System.out.println(ins.toString());
 			//Operation operation = instruction.getOperation();
 			switch(ins.GetOpCode()){
 				
@@ -276,18 +276,18 @@ public class CodeGenerator {
 		int pos = fixUp.get(from);
 		int code = programCodes.get(pos);
 		int target = blockVsCodeNumber.get(to);
-		System.out.println("Blk vs codeNum: " +to+" "+target);
+		//System.out.println("Blk vs codeNum: " +to+" "+target);
 		target = target-pos;
 		code = code | target;
 		updateCodeIntheProgram(code,pos);
 	}
 	private void updateJSRBranch(int from, int to)
 	{
-		System.out.println("Update JSR: "+ from +" "+ to +" "+fixUp.get(from));
+		//System.out.println("Update JSR: "+ from +" "+ to +" "+fixUp.get(from));
 		int pos = fixUp.get(from);
 		int code = programCodes.get(pos);
 		int target = blockVsCodeNumber.get(to);
-		System.out.println("Blk vs codeNum: " +to+" "+target);
+		//System.out.println("Blk vs codeNum: " +to+" "+target);
 		target = target*4;
 		code = code | target;
 		updateCodeIntheProgram(code,pos);
@@ -374,7 +374,7 @@ public class CodeGenerator {
 				if(operand1.getRegister()==-1)
 				{
 					code = dlx.assemble(immediateOpCode, operand2.getRegister(),0 ,operand1.GetValue());
-					System.out.println(operand2.getRegister() +" "+operand1.GetValue());
+					//System.out.println(operand2.getRegister() +" "+operand1.GetValue());
 					
 				}
 				else
@@ -382,7 +382,7 @@ public class CodeGenerator {
 					code = dlx.assemble(opCode, operand2.getRegister(),0 ,operand1.getRegister());
 				}
 			}
-			System.out.println("move code: "+ code);
+			//System.out.println("move code: "+ code);
 			addCodeToProgram(code);
 			return;
 		}
@@ -398,7 +398,7 @@ public class CodeGenerator {
 		if(operand1.GetKind()==Result.Kind.FRAME_POINTER && operand2.GetKind()==Result.Kind.BASE_ADDRESS)
 		{
 			code = dlx.assemble(dlx.ADDI ,resultRegNo, 28, 0);
-			System.out.println("array add code: "+operand2.getVarName()+" "+ code);
+			//System.out.println("array add code: "+operand2.getVarName()+" "+ code);
 			fixUp_A.put(codeNumber, operand2.getVarName());
 			addCodeToProgram(code);
 			return;
@@ -448,7 +448,7 @@ public class CodeGenerator {
 			if(ins.getW().getRegister()!=-1)
 			{
 			code = dlx.assemble(dlx.WRD, ins.getW().getRegister());
-			System.out.println("Write register:"+ ins.getW().getRegister() );
+			//System.out.println("Write register:"+ ins.getW().getRegister() );
 	
 			}
 			else
@@ -544,10 +544,10 @@ public class CodeGenerator {
 	{
 		int code = dlx.assemble(16, 28, 0 ,codeNumber*4);
 		updateCodeIntheProgram( code, 0);
-		for(int pos:fixUp_A.keySet())
+		/*for(int pos:fixUp_A.keySet())
 		{
 			System.out.println("position:"+pos+" "+fixUp_A.get(pos));
-		}
+		}*/
 		
 		for(int pos:fixUp_A.keySet())
 		{
